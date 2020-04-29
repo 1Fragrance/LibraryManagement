@@ -3,7 +3,10 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29911.84
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibraryManagement.View", "LibraryManagement\LibraryManagement.View.csproj", "{C42395D6-D74A-4D86-B8B2-4C069364868B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibraryManagement.View", "LibraryManagement.View\LibraryManagement.View.csproj", "{C42395D6-D74A-4D86-B8B2-4C069364868B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{5D15C9A8-852B-4550-A7AC-DC7C3A8A75AD} = {5D15C9A8-852B-4550-A7AC-DC7C3A8A75AD}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibraryManagement.Core", "LibraryManagement.Core\LibraryManagement.Core.csproj", "{5D15C9A8-852B-4550-A7AC-DC7C3A8A75AD}"
 EndProject
