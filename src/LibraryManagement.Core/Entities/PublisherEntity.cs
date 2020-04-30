@@ -1,4 +1,6 @@
-﻿namespace LibraryManagement.Core.Entities
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace LibraryManagement.Core.Entities
 {
     /// <summary>
     /// Publisher model
@@ -8,6 +10,8 @@
         /// <summary>
         /// Publisher name
         /// </summary>
+        [Required]
+        [MaxLength(Constants.DataAnnotationConstants.StringMaxLengthValue)]
         public string Name { get; set; }
     }
 }

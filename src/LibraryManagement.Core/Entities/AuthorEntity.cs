@@ -1,4 +1,6 @@
-﻿namespace LibraryManagement.Core.Entities
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace LibraryManagement.Core.Entities
 {
     /// <summary>
     /// Author model
@@ -8,16 +10,22 @@
         /// <summary>
         /// Author name
         /// </summary>
+        [Required]
+        [MaxLength(Constants.DataAnnotationConstants.StringMaxLengthValue)]
         public string Name { get; set; }
 
         /// <summary>
         /// Author surname
         /// </summary>
+        [Required]
+        [MaxLength(Constants.DataAnnotationConstants.StringMaxLengthValue)]
         public string Surname { get; set; }
 
         /// <summary>
         /// Author patronymic 
         /// </summary>
+        [Required]
+        [MaxLength(Constants.DataAnnotationConstants.StringMaxLengthValue)]
         public string Patronymic { get; set; }
     }
 }
