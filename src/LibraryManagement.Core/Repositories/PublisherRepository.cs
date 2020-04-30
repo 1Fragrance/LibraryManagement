@@ -1,17 +1,11 @@
-﻿using System.Data;
-using LibraryManagement.Core.Entities;
+﻿using LibraryManagement.Core.Entities;
 
 namespace LibraryManagement.Core.Repositories
 {
     public class PublisherRepository : RepositoryBase<PublisherEntity>
     {
-        public PublisherRepository(DatabaseContext context) : base(context)
+        public PublisherRepository(DatabaseContext context) : base(context.PublisherSet, context)
         {
-        }
-
-        protected override PublisherEntity MapRowToEntity(IDataRecord dataRecord)
-        {
-            throw new System.NotImplementedException();
         }
     }
 }

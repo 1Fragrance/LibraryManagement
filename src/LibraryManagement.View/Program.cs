@@ -6,10 +6,10 @@ namespace LibraryManagement.View
     {
         private static void Main(string[] args)
         {
-            using (var context = new DatabaseContext())
-            {
+            //using (var context = new DbContext())
+            //{
 
-            }
+            //}
         }
     }
 }

@@ -1,17 +1,11 @@
-﻿using System.Data;
-using LibraryManagement.Core.Entities;
+﻿using LibraryManagement.Core.Entities;
 
 namespace LibraryManagement.Core.Repositories
 {
     public class UserRepository : RepositoryBase<UserEntity>
     {
-        public UserRepository(DatabaseContext context) : base(context)
+        public UserRepository(DatabaseContext context) : base(context.UserSet, context)
         {
-        }
-
-        protected override UserEntity MapRowToEntity(IDataRecord dataRecord)
-        {
-            throw new System.NotImplementedException();
         }
     }
 }

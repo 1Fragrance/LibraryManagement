@@ -1,17 +1,11 @@
-﻿using System.Data;
-using LibraryManagement.Core.Entities;
+﻿using LibraryManagement.Core.Entities;
 
 namespace LibraryManagement.Core.Repositories
 {
     public class BookRepository : RepositoryBase<BookEntity>
     {
-        public BookRepository(DatabaseContext context) : base(context)
+        public BookRepository(DatabaseContext context) : base(context.BookSet, context)
         {
-        }
-
-        protected override BookEntity MapRowToEntity(IDataRecord dataRecord)
-        {
-            throw new System.NotImplementedException();
         }
     }
 }

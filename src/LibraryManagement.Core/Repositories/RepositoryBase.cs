@@ -1,33 +1,25 @@
-﻿using System.Collections.Generic;
-using System.Data;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using LibraryManagement.Core.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace LibraryManagement.Core.Repositories
 {
     public abstract class RepositoryBase<TEntity> where TEntity : EntityBase
     {
-        protected DatabaseContext Context { get; set; }
+        protected DatabaseContext DbContext { get; }
+        protected DbSet<TEntity> DbSet { get; }
 
-        protected RepositoryBase(DatabaseContext context)
+        protected RepositoryBase(DbSet<TEntity> dbSet, DatabaseContext dbContext)
         {
-            Context = context;
+            DbSet = dbSet;
+            DbContext = dbContext;
         }
 
-        protected IList<TEntity> GetList(IDbCommand command)
+        protected IList<TEntity> GetList()
         {
-            using (var reader = command.ExecuteReader())
-            {
-                var entityList = new List<TEntity>();
-                while (reader.Read())
-                {
-                    var entity = MapRowToEntity(reader);
-                    entityList.Add(entity);
-                }
-
-                return entityList;
-            }
+            return DbSet.ToList();
         }
-
-        protected abstract TEntity MapRowToEntity(IDataRecord dataRecord);
     }
 }

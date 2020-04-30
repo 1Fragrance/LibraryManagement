@@ -1,32 +1,19 @@
-﻿using System;
-using System.Data.SqlClient;
-using LibraryManagement.Core.Repositories;
+﻿using LibraryManagement.Core.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace LibraryManagement.Core
 {
-    public class DatabaseContext : IDisposable
+    public class DatabaseContext : DbContext
     {
-        private SqlConnection Connection { get; }
+        public DbSet<AuthorEntity> AuthorSet { get; set; }
+        public DbSet<UserEntity> UserSet { get; set; }
+        public DbSet<PublisherEntity> PublisherSet { get; set; }
+        public DbSet<BookEntity> BookSet { get; set; }
 
-        public AuthorRepository Author { get; }
-        public UserRepository User { get; }
-        public PublisherRepository Publisher { get; }
-        public BookRepository Book { get; }
-
-        public DatabaseContext()
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            Connection = new SqlConnection(Constants.ConnectionString);
-            Connection.Open();
-
-            Author = new AuthorRepository();
-            User = new UserRepository();
-            Publisher = new PublisherRepository();
-            Book = new BookRepository();
-        }
-
-        public void Dispose()
-        {
-            Connection.Close();
+            optionsBuilder.UseSqlServer(Constants.ConnectionString);
+            base.OnConfiguring(optionsBuilder);
         }
     }
 }
