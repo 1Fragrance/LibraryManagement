@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using LibraryManagement.Core.Enums;
 
 namespace LibraryManagement.Core.Entities
@@ -28,5 +29,10 @@ namespace LibraryManagement.Core.Entities
         [Required]
         [Range((int) RoleType.Client, (int) RoleType.Admin)]
         public RoleType Role { get; set; }
+
+        /// <summary>
+        /// Books where current user is last who take them
+        /// </summary>
+        public ICollection<BookEntity> LastTakenBooks { get; set; }
     }
 }

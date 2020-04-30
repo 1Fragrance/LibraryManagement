@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace LibraryManagement.Core.Entities
 {
@@ -13,5 +14,10 @@ namespace LibraryManagement.Core.Entities
         [Required]
         [MaxLength(Constants.DataAnnotationConstants.StringMaxLengthValue)]
         public string Name { get; set; }
+
+        /// <summary>
+        /// Relative books
+        /// </summary>
+        public ICollection<BookEntity> Books { get; set; }
     }
 }
