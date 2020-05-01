@@ -16,17 +16,17 @@ namespace LibraryManagement.Core.Repositories
             DbContext = dbContext;
         }
 
-        protected IList<TEntity> GetList()
+        public IList<TEntity> GetList()
         {
             return DbSet.ToList();
         }
 
-        protected TEntity GetEntity(int id)
+        public TEntity GetEntity(int id)
         {
             return DbSet.FirstOrDefault(w => w.Id == id);
         }
 
-        protected void Save(TEntity entity)
+        public void Save(TEntity entity)
         {
             var isRecordExist = entity.Id != 0;
 
@@ -35,7 +35,7 @@ namespace LibraryManagement.Core.Repositories
             DbContext.SaveChanges();
         }
 
-        protected void Delete(int id)
+        public void Delete(int id)
         {
             var entity = DbSet.Find(id);
 

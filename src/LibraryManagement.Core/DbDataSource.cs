@@ -1,8 +1,9 @@
-﻿using LibraryManagement.Core.Repositories;
+﻿using System;
+using LibraryManagement.Core.Repositories;
 
 namespace LibraryManagement.Core
 {
-    public class DbDataSource
+    public class DbDataSource : IDisposable
     {
         protected DatabaseContext Context { get; }
 
@@ -14,6 +15,11 @@ namespace LibraryManagement.Core
         public DbDataSource(DatabaseContext context)
         {
             Context = context;
+        }
+
+        public void Dispose()
+        {
+            Context?.Dispose();
         }
     }
 }

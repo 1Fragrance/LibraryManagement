@@ -5,13 +5,14 @@ namespace LibraryManagement.Core
 {
     public sealed class DatabaseContext : DbContext
     {
-        public DbSet<AuthorEntity> AuthorSet { get; set; }
-        public DbSet<UserEntity> UserSet { get; set; }
-        public DbSet<PublisherEntity> PublisherSet { get; set; }
-        public DbSet<BookEntity> BookSet { get; set; }
+        public DbSet<AuthorEntity> Author { get; set; }
+        public DbSet<UserEntity> User { get; set; }
+        public DbSet<PublisherEntity> Publisher { get; set; }
+        public DbSet<BookEntity> Book { get; set; }
 
         public DatabaseContext()
         {
+            Database.EnsureDeleted();
             Database.EnsureCreated();
         }
 

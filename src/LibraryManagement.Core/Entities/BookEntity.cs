@@ -42,15 +42,13 @@ namespace LibraryManagement.Core.Entities
         /// <summary>
         /// Foreign key to the publisher entity
         /// </summary>
-        [Required]
-        public int PublisherId { get; set; }
+        public int? PublisherId { get; set; }
         public PublisherEntity Publisher { get; set; }
 
         /// <summary>
         /// Foreign key to the author entity
         /// </summary>
-        [Required]
-        public int AuthorId { get; set; }
+        public int? AuthorId { get; set; }
         public AuthorEntity Author { get; set; }
 
         /// <summary>
