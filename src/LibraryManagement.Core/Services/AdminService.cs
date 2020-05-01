@@ -17,16 +17,32 @@ namespace LibraryManagement.Core.Services
             return users;
         }
 
-        public void CreateUser(string login, string password, int roleTypeId)
+        public void CreateUser(string login, string password, RoleType roleType)
         {
-            var user = new UserEntity()
+            var user = new UserEntity
             {
                 Login = login,
                 Password = password,
-                Role = (RoleType) roleTypeId
+                Role = roleType
             };
 
             Context.Users.Save(user);
+        }
+
+        public void UpdateUser(int id, string login, string password, RoleType roleType)
+        {
+            var user = Context.Users.GetEntity(id);
+
+            user.Login = login;
+            user.Password = password;
+            user.Role = roleType;
+
+            Context.Users.Save(user);
+        }
+
+        public void DeleteUser(int id)
+        {
+            Context.Users.Delete(id);
         }
 
         public IList<UserEntity> GetUsers()

@@ -1,10 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using LibraryManagement.Core;
+using LibraryManagement.Core.Services;
 
 namespace LibraryManagement.View.Modules
 {
-    class ClientModule
+    public class ClientModule : ModuleBase
     {
+        private ClientService ClientService { get; }
+
+        public ClientModule(DbDataSource dataSource)
+        {
+            ClientService = new ClientService(dataSource);
+        }
     }
 }
