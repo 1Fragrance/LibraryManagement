@@ -1,4 +1,4 @@
-﻿namespace LibraryManagement.Core
+﻿namespace LibraryManagement.Common
 {
     public static class Constants
     {
@@ -10,6 +10,7 @@
         public static class DataAnnotationConstants
         {
             public const int StringMaxLengthValue = 255;
+            public const int LibraryCardNumberMaxLength = 6;
         }
 
         public static class LoggingConstants

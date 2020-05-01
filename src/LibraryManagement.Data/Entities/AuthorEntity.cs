@@ -1,38 +1,38 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using LibraryManagement.Core.Enums;
+using LibraryManagement.Common;
 
-namespace LibraryManagement.Core.Entities
+namespace LibraryManagement.Data.Entities
 {
     /// <summary>
-    /// User model
+    /// Author model
     /// </summary>
-    public class UserEntity : EntityBase
+    public class AuthorEntity : EntityBase
     {
         /// <summary>
-        /// User login
+        /// Author name
         /// </summary>
         [Required]
         [MaxLength(Constants.DataAnnotationConstants.StringMaxLengthValue)]
-        public string Login { get; set; }
+        public string Name { get; set; }
 
         /// <summary>
-        /// User password
+        /// Author surname
         /// </summary>
         [Required]
         [MaxLength(Constants.DataAnnotationConstants.StringMaxLengthValue)]
-        public string Password { get; set; }
+        public string Surname { get; set; }
 
         /// <summary>
-        /// User role
+        /// Author patronymic 
         /// </summary>
         [Required]
-        [Range((int) RoleType.Client, (int) RoleType.Admin)]
-        public RoleType Role { get; set; }
+        [MaxLength(Constants.DataAnnotationConstants.StringMaxLengthValue)]
+        public string Patronymic { get; set; }
 
         /// <summary>
-        /// Books where current user is last who take them
+        /// Relative books
         /// </summary>
-        public ICollection<BookEntity> LastTakenBooks { get; set; }
+        public ICollection<BookEntity> Books { get; set; }
     }
 }

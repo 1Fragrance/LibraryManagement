@@ -1,5 +1,5 @@
-﻿using System;
-using LibraryManagement.Core.Enums;
+﻿using LibraryManagement.Common.Enums;
+using System;
 
 namespace LibraryManagement.View.Modules
 {

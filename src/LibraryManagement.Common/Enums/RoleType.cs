@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace LibraryManagement.Core.Enums
+namespace LibraryManagement.Common.Enums
 {
     /// <summary>
     /// Account role type enum

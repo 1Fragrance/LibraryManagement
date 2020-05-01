@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 
-namespace LibraryManagement.Core.Enums
+namespace LibraryManagement.Common.Enums
 {
     public static class EnumExtensions
     {

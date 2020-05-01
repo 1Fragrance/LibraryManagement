@@ -1,4 +1,5 @@
-﻿using LibraryManagement.Core.Results;
+﻿using LibraryManagement.Common.Results;
+using LibraryManagement.Data;
 
 namespace LibraryManagement.Core.Services
 {

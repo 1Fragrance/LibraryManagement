@@ -1,4 +1,6 @@
-﻿namespace LibraryManagement.Core.Services
+﻿using LibraryManagement.Data;
+
+namespace LibraryManagement.Core.Services
 {
     public class ClientService : ServiceBase
     {

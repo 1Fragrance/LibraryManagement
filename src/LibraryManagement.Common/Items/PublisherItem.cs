@@ -1,23 +1,20 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
-namespace LibraryManagement.Core.Entities
+namespace LibraryManagement.Common.Items
 {
     /// <summary>
     /// Publisher model
     /// </summary>
-    public class PublisherEntity : EntityBase
+    public class PublisherItem : ItemBase
     {
         /// <summary>
         /// Publisher name
         /// </summary>
-        [Required]
-        [MaxLength(Constants.DataAnnotationConstants.StringMaxLengthValue)]
         public string Name { get; set; }
 
         /// <summary>
         /// Relative books
         /// </summary>
-        public ICollection<BookEntity> Books { get; set; }
+        public ICollection<BookItem> Books { get; set; }
     }
 }

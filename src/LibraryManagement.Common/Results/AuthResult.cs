@@ -1,6 +1,6 @@
-﻿using LibraryManagement.Core.Enums;
+﻿using LibraryManagement.Common.Enums;
 
-namespace LibraryManagement.Core.Results
+namespace LibraryManagement.Common.Results
 {
     public class AuthResult : ResultBase
     {

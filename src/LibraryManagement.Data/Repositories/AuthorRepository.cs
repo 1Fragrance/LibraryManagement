@@ -1,6 +1,6 @@
-﻿using LibraryManagement.Core.Entities;
+﻿using LibraryManagement.Data.Entities;
 
-namespace LibraryManagement.Core.Repositories
+namespace LibraryManagement.Data.Repositories
 {
     public class AuthorRepository : RepositoryBase<AuthorEntity>
     {

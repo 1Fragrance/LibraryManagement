@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace LibraryManagement.Core.Results
+namespace LibraryManagement.Common.Results
 {
     public class ExecutionResult : ResultBase
     {

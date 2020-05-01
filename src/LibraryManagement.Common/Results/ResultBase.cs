@@ -1,4 +1,4 @@
-﻿namespace LibraryManagement.Core.Results
+﻿namespace LibraryManagement.Common.Results
 {
     public class ResultBase
     {

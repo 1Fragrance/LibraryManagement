@@ -1,5 +1,5 @@
-﻿using LibraryManagement.Core;
-using LibraryManagement.Core.Services;
+﻿using LibraryManagement.Core.Services;
+using LibraryManagement.Data;
 
 namespace LibraryManagement.View.Modules
 {
@@ -11,5 +11,6 @@ namespace LibraryManagement.View.Modules
         {
             ClientService = new ClientService(dataSource);
         }
+
     }
 }

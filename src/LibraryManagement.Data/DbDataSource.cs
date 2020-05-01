@@ -1,7 +1,7 @@
 ﻿using System;
-using LibraryManagement.Core.Repositories;
+using LibraryManagement.Data.Repositories;
 
-namespace LibraryManagement.Core
+namespace LibraryManagement.Data
 {
     public class DbDataSource : IDisposable
     {

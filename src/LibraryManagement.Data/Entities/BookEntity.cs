@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using LibraryManagement.Common;
 
-namespace LibraryManagement.Core.Entities
+namespace LibraryManagement.Data.Entities
 {
     /// <summary>
     /// Book model

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace LibraryManagement.Core.Entities
+namespace LibraryManagement.Data.Entities
 {
     /// <summary>
     /// Base model

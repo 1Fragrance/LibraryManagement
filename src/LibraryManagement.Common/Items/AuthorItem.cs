@@ -1,38 +1,33 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace LibraryManagement.Core.Entities
+namespace LibraryManagement.Common.Items
 {
     /// <summary>
     /// Author model
     /// </summary>
-    public class AuthorEntity : EntityBase
+    public class AuthorItem : ItemBase
     {
         /// <summary>
         /// Author name
         /// </summary>
-        [Required]
-        [MaxLength(Constants.DataAnnotationConstants.StringMaxLengthValue)]
         public string Name { get; set; }
 
         /// <summary>
         /// Author surname
         /// </summary>
-        [Required]
-        [MaxLength(Constants.DataAnnotationConstants.StringMaxLengthValue)]
         public string Surname { get; set; }
 
         /// <summary>
         /// Author patronymic 
         /// </summary>
-        [Required]
-        [MaxLength(Constants.DataAnnotationConstants.StringMaxLengthValue)]
         public string Patronymic { get; set; }
 
         /// <summary>
         /// Relative books
         /// </summary>
-        public ICollection<BookEntity> Books { get; set; }
+        public ICollection<BookItem> Books { get; set; }
+
+        public string DisplayName => $"{Surname} {Name} {Patronymic}";
     }
 }

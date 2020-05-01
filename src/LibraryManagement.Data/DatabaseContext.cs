@@ -1,7 +1,8 @@
-﻿using LibraryManagement.Core.Entities;
+﻿using LibraryManagement.Common;
+using LibraryManagement.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace LibraryManagement.Core
+namespace LibraryManagement.Data
 {
     public sealed class DatabaseContext : DbContext
     {

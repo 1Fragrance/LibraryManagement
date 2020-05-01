@@ -1,9 +1,9 @@
-﻿using LibraryManagement.Core.Entities;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using LibraryManagement.Data.Entities;
+using Microsoft.EntityFrameworkCore;
 
-namespace LibraryManagement.Core.Repositories
+namespace LibraryManagement.Data.Repositories
 {
     public abstract class RepositoryBase<TEntity> where TEntity : EntityBase
     {

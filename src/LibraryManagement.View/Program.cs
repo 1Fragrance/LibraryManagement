@@ -3,7 +3,6 @@ using LibraryManagement.Core.Enums;
 using LibraryManagement.View.Modules;
 using System;
 using System.IO;
-using System.Linq;
 
 namespace LibraryManagement.View
 {
@@ -47,12 +46,13 @@ namespace LibraryManagement.View
                 {
                     var clientModule = new ClientModule(dataSource);
 
-                    Console.WriteLine("ClientPart");
                     break;
                 }
                 case RoleType.Admin:
                 {
                     var adminModule = new AdminModule(dataSource);
+                    adminModule.WorkAsAdmin();
+
                     break;
                 }
                 default:
@@ -60,64 +60,6 @@ namespace LibraryManagement.View
                     throw new InvalidDataException();
                 }
             }
-
-
-
-                            case RoleType.Admin:
-                            {
-
-                                
-
-                                    case ConsoleKey.D4:
-                                    {
-                                        Console.Clear();
-                                        
-
-                                        choice = Console.ReadKey();
-                                        switch (choice.Key)
-                                        {
-                                            case ConsoleKey.D1:
-                                            {
-                                                break;
-                                            }
-
-                                            case ConsoleKey.D2:
-                                            {
-                                                break;
-                                            }
-
-                                            case ConsoleKey.D3:
-                                            {
-                                                break;
-                                            }
-                                        }
-
-                                        break;
-                                    }
-
-                                    case ConsoleKey.D5:
-                                    {
-                                        Environment.Exit(0);
-                                        break;
-                                    }
-                                }
-
-                                
-                                break;
-                            }
-                        }
-
-                        break;
-                    }
-                    case ConsoleKey.D2:
-                    {
-                        break;
-                    }
-                    default:
-                    {
-                        break;
-                    }
-                }
-}
+        }
     }
 }

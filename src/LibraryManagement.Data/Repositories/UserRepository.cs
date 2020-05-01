@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using LibraryManagement.Core.Entities;
+using LibraryManagement.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace LibraryManagement.Core.Repositories
+namespace LibraryManagement.Data.Repositories
 {
     public class UserRepository : RepositoryBase<UserEntity>
     {
@@ -21,6 +21,18 @@ namespace LibraryManagement.Core.Repositories
             return DbSet
                 .Include(w => w.LastTakenBooks.Where(r => r.IsBookInLibrary == false))
                 .ToList();
+        }
+
+        public bool IsClientCardNumberExist(string clientCardNumber, int? userId = null)
+        {
+            var query = DbSet.AsQueryable();
+
+            if (userId != null)
+            {
+                query = query.Where(r => r.Id != userId);
+            }
+
+            return query.Any(w => w.LibraryCardNumber == clientCardNumber);
         }
     }
 }
