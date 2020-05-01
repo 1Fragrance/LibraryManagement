@@ -11,5 +11,10 @@
         {
             public const int StringMaxLengthValue = 255;
         }
+
+        public static class LoggingConstants
+        {
+            public const string FileName = "log.txt";
+        }
     }
 }
