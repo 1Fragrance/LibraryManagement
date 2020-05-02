@@ -30,5 +30,11 @@ namespace LibraryManagement.Common
             public const int SelectSubEntityOperationId = 2;
             public const int ReturnOperationId = 0;
         }
+
+        public static class Strings
+        {
+            public const string Yes = "Да";
+            public const string No = "Нет";
+        }
     }
 }

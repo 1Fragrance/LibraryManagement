@@ -50,5 +50,21 @@ namespace LibraryManagement.View
                 return parsedInt;
             }
         }
+
+        public static bool ReadBoolean()
+        {
+            while (true)
+            {
+                var str = Console.ReadLine();
+
+                if (!string.Equals(str, Constants.Strings.Yes, StringComparison.InvariantCultureIgnoreCase) || !string.Equals(str, Constants.Strings.No, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    Console.WriteLine("** Некорректный ввод! **");
+                    continue;
+                }
+
+                return string.Equals(str, Constants.Strings.Yes);
+            }
+        }
     }
 }

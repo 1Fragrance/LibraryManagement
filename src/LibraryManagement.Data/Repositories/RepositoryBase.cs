@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using LibraryManagement.Common;
+﻿using LibraryManagement.Common;
 using LibraryManagement.Data.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace LibraryManagement.Data.Repositories
 {
@@ -10,6 +10,7 @@ namespace LibraryManagement.Data.Repositories
     {
         protected DatabaseContext DbContext { get; }
         protected DbSet<TEntity> DbSet { get; }
+        private const string LikeSymbol = "%";
 
         protected RepositoryBase(DbSet<TEntity> dbSet, DatabaseContext dbContext)
         {
@@ -45,6 +46,17 @@ namespace LibraryManagement.Data.Repositories
                 DbContext.Entry(entity).State = EntityState.Deleted;
                 DbContext.SaveChanges();
             }
+        }
+
+        public string GetLikeExpression(string str)
+        {
+            if (string.IsNullOrEmpty(str))
+            {
+                return LikeSymbol;
+            }
+
+            var likeExpression = $"{LikeSymbol}{str}{LikeSymbol}";
+            return likeExpression;
         }
     }
 }

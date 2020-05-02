@@ -1,4 +1,5 @@
 ﻿using LibraryManagement.Common;
+using LibraryManagement.Common.Filters;
 using LibraryManagement.Common.Items;
 using LibraryManagement.Data;
 using System;
@@ -15,6 +16,15 @@ namespace LibraryManagement.Core.Services
         public AdminService(DbDataSource context) : base(context)
         {
             Mapper = new Mapper();
+        }
+
+        public IList<BookItem> GetFilteredBooks(BookFilter filter)
+        {
+            var books = Context.Books.GetFilteredBooks(filter);
+
+            var bookItems = books.Select(w => Mapper.BookMapper.MapToItem(w)).ToList();
+
+            return bookItems;
         }
 
         public void UpdateBook(BookItem bookItem)
