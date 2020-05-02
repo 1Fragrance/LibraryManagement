@@ -19,6 +19,24 @@ namespace LibraryManagement.Core.Services
             Mapper = new Mapper();
         }
 
+        public IList<BookItem> GetAlreadyTakenBooks()
+        {
+            var books = Context.Books.GetFilteredBooks(new BookFilter {IsBookInLibrary = false});
+
+            var bookItems = books.Select(w => Mapper.BookMapper.MapToItem(w)).ToList();
+
+            return bookItems;
+        }
+
+        public IList<BookItem> GetOrderedBooksAfterSelectedYear(int year)
+        {
+            var books = Context.Books.GetOrderedBooksAfterSelectedYear(year);
+
+            var bookItems = books.Select(w => Mapper.BookMapper.MapToItem(w)).ToList();
+
+            return bookItems;
+        }
+
         public IList<BookItem> GetFilteredBooks(BookFilter filter)
         {
             var books = Context.Books.GetFilteredBooks(filter);

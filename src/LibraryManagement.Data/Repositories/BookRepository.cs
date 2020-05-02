@@ -34,9 +34,21 @@ namespace LibraryManagement.Data.Repositories
                 .ToList();
         }
 
+        public IList<BookEntity> GetOrderedBooksAfterSelectedYear(int year)
+        {
+            return DbSet
+                .Include(w => w.Author)
+                .Include(w => w.LastUser)
+                .Include(w => w.Publisher)
+                .Where(r => r.PublicationYear <= year).OrderBy(w => w.Name).ToList();
+        }
+
         public IList<BookEntity> GetSortedBooks(BookFilteringType filteringType, bool isAsc)
         {
-            var query = GetSorted(DbSet.AsQueryable(), filteringType, isAsc);
+            var query = GetSorted(DbSet.AsQueryable(), filteringType, isAsc)
+                .Include(w => w.Author)
+                .Include(w => w.LastUser)
+                .Include(w => w.Publisher);
 
             return query.ToList();
         }

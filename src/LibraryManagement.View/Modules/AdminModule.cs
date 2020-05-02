@@ -138,6 +138,7 @@ namespace LibraryManagement.View.Modules
                 {
                     case ConsoleKey.D1:
                     {
+                        Console.Clear();
                         Console.WriteLine("Вывод списка книг в отфильтрованном по определенному полю виде");
                         PrintBookFieldSelection();
 
@@ -203,6 +204,7 @@ namespace LibraryManagement.View.Modules
                     }
                     case ConsoleKey.D2:
                     {
+                        Console.Clear();
                         Console.WriteLine("Вывод списка книг в отсортированном виде");
                         PrintBookFieldSelection();
 
@@ -222,12 +224,41 @@ namespace LibraryManagement.View.Modules
                         Console.ReadKey();
                         break;
                     }
+
                     case ConsoleKey.D3:
                     {
+                        Console.Clear();
+                        Console.WriteLine("Вывод книг в алфавитном порядке, изданных после заданного года");
+                        Console.WriteLine("Введите год:");
+
+                        var selectedYear = ConsoleExtensions.ReadInteger();
+
+                        var books = AdminService.GetOrderedBooksAfterSelectedYear(selectedYear);
+
+                        foreach (var book in books)
+                        {
+                            PrintBookInfo(book);
+                        }
+
+                        Console.WriteLine("** Нажмите любую клавишу для выхода **");
+                        Console.ReadKey();
+
                         break;
                     }
                     case ConsoleKey.D4:
                     {
+                        Console.Clear();
+                        Console.WriteLine("Вывод книг находящихся в текущий момент у читателей");
+
+                        var books = AdminService.GetAlreadyTakenBooks();
+                        foreach (var book in books)
+                        {
+                            PrintBookInfo(book);
+                        }
+
+                        Console.WriteLine("** Нажмите любую клавишу для выхода **");
+                        Console.ReadKey();
+
                         break;
                     }
                     case ConsoleKey.D5:
