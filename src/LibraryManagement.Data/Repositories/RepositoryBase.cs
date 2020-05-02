@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using LibraryManagement.Common;
 using LibraryManagement.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -28,7 +29,7 @@ namespace LibraryManagement.Data.Repositories
 
         public void Save(TEntity entity)
         {
-            var isRecordExist = entity.Id != 0;
+            var isRecordExist = entity.Id != Constants.DataAnnotationConstants.NewEntityId;
 
             DbContext.Entry(entity).State = isRecordExist ? EntityState.Modified : EntityState.Added;
 

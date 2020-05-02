@@ -1,8 +1,9 @@
-﻿using LibraryManagement.Core;
-using LibraryManagement.Core.Enums;
-using LibraryManagement.View.Modules;
+﻿using LibraryManagement.View.Modules;
 using System;
 using System.IO;
+using LibraryManagement.Common;
+using LibraryManagement.Common.Enums;
+using LibraryManagement.Data;
 
 namespace LibraryManagement.View
 {

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using LibraryManagement.Common;
 
 namespace LibraryManagement.Data.Entities
@@ -32,6 +33,7 @@ namespace LibraryManagement.Data.Entities
         /// Year of publication of the book
         /// </summary>
         [Required]
+        [Range(Constants.DataAnnotationConstants.YearMinValue, int.MaxValue)]
         public int PublicationYear { get; set; }
 
         /// <summary>

@@ -7,6 +7,6 @@ namespace LibraryManagement.Core.Mappers
     {
         public TEntity MapToEntity(TItem item, TEntity sourceEntity = null);
 
-        public TItem MapToItem(TEntity entity, TItem sourceItem);
+        public TItem MapToItem(TEntity entity, TItem sourceItem = null);
     }
 }

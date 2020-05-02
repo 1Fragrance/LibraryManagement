@@ -143,45 +143,27 @@ namespace LibraryManagement.View.Modules
 
                     case ConsoleKey.D2:
                         {
-                            //Console.Clear();
-                            //Console.WriteLine("Добавление новой книги в базу");
+                            Console.Clear();
+                            Console.WriteLine("Добавление новой книги в базу");
 
-                            //Console.WriteLine("Введите название книги:");
-                            //var name = Console.ReadLine();
+                            var bookItem = CreateOrUpdateBook();
 
-                            //Console.WriteLine(":");
-                            //var password = Console.ReadLine();
-
-                            //Console.WriteLine("Тип записи: 0 - пользователь, 1 - администратор:");
-                            //var roleType = ReadRoleType();
-
-                            //var userItem = new BookItem()
-                            //{
-
-                            //};
-
-                            //AdminService.CreateUser(login, password, roleType);
-                            //break;
+                            AdminService.CreateBook(bookItem);
+                            break;
                         }
 
                     case ConsoleKey.D3:
                         {
-                            //Console.Clear();
-                            //Console.WriteLine("Редактирование существующей учетной записи");
-                            //Console.WriteLine("Выберите учетную запись:");
+                            Console.Clear();
+                            Console.WriteLine("Редактирование существующей книги");
+                            Console.WriteLine("Выберите книгу:");
 
-                            //var selectedUserId = SelectUserFromList();
+                            var selectedBookId = SelectBookFromList();
 
-                            //Console.WriteLine("Введите новый логин:");
-                            //var login = Console.ReadLine();
+                            var bookItem = CreateOrUpdateBook();
+                            bookItem.Id = selectedBookId;
 
-                            //Console.WriteLine("Введите новый пароль:");
-                            //var password = Console.ReadLine();
-
-                            //Console.WriteLine("Новый тип записи: 0 - пользователь, 1 - администратор:");
-                            //var roleType = ReadRoleType();
-
-                            //AdminService.UpdateUser(selectedUserId, login, password, roleType);
+                            AdminService.UpdateBook(bookItem);
 
                             break;
                         }
@@ -199,6 +181,96 @@ namespace LibraryManagement.View.Modules
                         }
                 }
             }
+        }
+
+        private BookItem CreateOrUpdateBook()
+        {
+            Console.WriteLine("Введите название книги:");
+            var name = Console.ReadLine();
+
+            Console.WriteLine("Введите количество страниц:");
+            var countOfPages = ConsoleExtensions.ReadInteger();
+
+            Console.WriteLine("Введите год публикации:");
+            var publicationYear = ConsoleExtensions.ReadYear();
+
+            Console.WriteLine("Введите регистрационный номер:");
+            var regNumber = Console.ReadLine();
+
+            Console.WriteLine();
+            Console.WriteLine(("{0}. Добавить нового автора:", Constants.OperationConstants.AddNewSubEntityOperationId));
+            Console.WriteLine(("{0}. Выбрать из существующих:", Constants.OperationConstants.SelectSubEntityOperationId));
+            var authorOperationChoice = ConsoleExtensions.ReadInteger(Constants.OperationConstants.AddNewSubEntityOperationId, Constants.OperationConstants.SelectSubEntityOperationId);
+
+            var authorItem = new AuthorItem();
+            switch (authorOperationChoice)
+            {
+                case Constants.OperationConstants.SelectSubEntityOperationId:
+                {
+                    Console.WriteLine("Существующие авторы:");
+                    Console.WriteLine($"Нажмите \"{Constants.OperationConstants.SelectSubEntityOperationId}\" для добавления нового автора");
+                    var selectedAuthorId = SelectAuthorFromList();
+
+                    if (selectedAuthorId != Constants.OperationConstants.SelectSubEntityOperationId)
+                    {
+                        InputAuthorFields(authorItem);
+                    }
+                    else
+                    {
+                        authorItem.Id = selectedAuthorId;
+                    }
+
+                    break;
+                }
+                case Constants.OperationConstants.AddNewSubEntityOperationId:
+                {
+                    InputAuthorFields(authorItem);
+                    break;
+                }
+            }
+
+            Console.WriteLine();
+            Console.WriteLine(("{0}. Добавить нового издателя:", Constants.OperationConstants.AddNewSubEntityOperationId));
+            Console.WriteLine(("{0}. Выбрать из существующих:", Constants.OperationConstants.SelectSubEntityOperationId));
+            var publisherOperationChoice = ConsoleExtensions.ReadInteger(Constants.OperationConstants.AddNewSubEntityOperationId, Constants.OperationConstants.SelectSubEntityOperationId);
+
+            var publisherItem = new PublisherItem();
+            switch (publisherOperationChoice)
+            {
+                case Constants.OperationConstants.SelectSubEntityOperationId:
+                {
+                    Console.WriteLine("Существующие издатели:");
+                    Console.WriteLine($"Нажмите \"{Constants.OperationConstants.SelectSubEntityOperationId}\" для добавления нового издателя");
+                    var selectedPublisherId = SelectPublisherFromList();
+
+                    if (selectedPublisherId != Constants.OperationConstants.SelectSubEntityOperationId)
+                    {
+                        InputPublisherFields(publisherItem);
+                    }
+                    else
+                    {
+                        publisherItem.Id = selectedPublisherId;
+                    }
+
+                    break;
+                }
+                case Constants.OperationConstants.AddNewSubEntityOperationId:
+                {
+                    InputPublisherFields(publisherItem);
+                    break;
+                }
+            }
+
+            return new BookItem
+            {
+                Name = name,
+                Author = authorItem,
+                IsBookInLibrary = false,
+                NumberOfPages = countOfPages,
+                PublicationYear = publicationYear,
+                Publisher = publisherItem,
+                RegNumber = regNumber,
+            };
         }
 
         public void UsersManagement()
@@ -246,7 +318,7 @@ namespace LibraryManagement.View.Modules
                             var cardNumber = InputCardNumber();
 
                             Console.WriteLine("Тип записи: 0 - пользователь, 1 - администратор:");
-                            var roleType = ReadRoleType();
+                            var roleType = ConsoleExtensions.ReadRoleType();
 
                             var userItem = new UserItem
                             {
@@ -275,7 +347,7 @@ namespace LibraryManagement.View.Modules
                             var password = Console.ReadLine();
 
                             Console.WriteLine("Новый тип записи: 0 - пользователь, 1 - администратор:");
-                            var roleType = ReadRoleType();
+                            var roleType = ConsoleExtensions.ReadRoleType();
 
                             Console.WriteLine("Введите новый уникальный 6-значный номер читательского билета или оставьте пустым для автоматической генерации");
                             var cardNumber = InputCardNumber(selectedUserId);
@@ -318,20 +390,37 @@ namespace LibraryManagement.View.Modules
                 Console.WriteLine($"{user.Id}. {user.Login}");
             }
 
-            int selectedUserId;
-            while (true)
-            {
-                selectedUserId = ReadInteger();
-                if (selectedUserId < users.Min(x => x.Id) || selectedUserId > users.Max(x => x.Id))
-                {
-                    Console.WriteLine("** Некорректный ввод **");
-                    continue;
-                }
-
-                break;
-            }
+            var selectedUserId = ConsoleExtensions.ReadInteger(users.Min(x => x.Id), users.Max(x => x.Id));
 
             return selectedUserId;
+        }
+
+        private int SelectAuthorFromList()
+        {
+            var authors = AdminService.GetAuthors();
+
+            foreach (var author in authors)
+            {
+                Console.WriteLine($"{author.Id}. {author.DisplayName}");
+            }
+
+            var selectedAuthorId = ConsoleExtensions.ReadInteger(authors.Min(x => x.Id), authors.Max(x => x.Id), Constants.OperationConstants.ReturnOperationId);
+
+            return selectedAuthorId;
+        }
+
+        private int SelectPublisherFromList()
+        {
+            var publishers = AdminService.GetPublishers();
+
+            foreach (var publisher in publishers)
+            {
+                Console.WriteLine($"{publisher.Id}. {publisher.Name}");
+            }
+
+            var selectedAuthorId = ConsoleExtensions.ReadInteger(publishers.Min(x => x.Id), publishers.Max(x => x.Id), Constants.OperationConstants.ReturnOperationId);
+
+            return selectedAuthorId;
         }
 
         private int SelectBookFromList()
@@ -343,18 +432,7 @@ namespace LibraryManagement.View.Modules
                 Console.WriteLine($"{book.Id}. {book.Name}");
             }
 
-            int selectedBookId;
-            while (true)
-            {
-                selectedBookId = ReadInteger();
-                if (selectedBookId < books.Min(x => x.Id) || selectedBookId > books.Max(x => x.Id))
-                {
-                    Console.WriteLine("** Некорректный ввод **");
-                    continue;
-                }
-
-                break;
-            }
+            var selectedBookId = ConsoleExtensions.ReadInteger(books.Min(x => x.Id), books.Max(x => x.Id));
 
             return selectedBookId;
         }
@@ -380,6 +458,24 @@ namespace LibraryManagement.View.Modules
 
                 Console.WriteLine("** Введенный номер карточки не подходит либо уже существует в системе **");
             }
+        }
+
+        private static void InputAuthorFields(AuthorItem authorItem)
+        {
+            Console.WriteLine("Введите имя автора:");
+            authorItem.Name = Console.ReadLine();
+
+            Console.WriteLine("Введите фамилию автора:");
+            authorItem.Surname = Console.ReadLine();
+
+            Console.WriteLine("Введите отчество автора:");
+            authorItem.Patronymic = Console.ReadLine();
+        }
+
+        private static void InputPublisherFields(PublisherItem publisherItem)
+        {
+            Console.WriteLine("Введите имя издателя:");
+            publisherItem.Name = Console.ReadLine();
         }
     }
 }
