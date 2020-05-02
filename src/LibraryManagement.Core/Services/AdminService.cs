@@ -5,6 +5,7 @@ using LibraryManagement.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using LibraryManagement.Common.Enums;
 
 namespace LibraryManagement.Core.Services
 {
@@ -21,6 +22,15 @@ namespace LibraryManagement.Core.Services
         public IList<BookItem> GetFilteredBooks(BookFilter filter)
         {
             var books = Context.Books.GetFilteredBooks(filter);
+
+            var bookItems = books.Select(w => Mapper.BookMapper.MapToItem(w)).ToList();
+
+            return bookItems;
+        }
+
+        public IList<BookItem> GetSortedBooks(BookFilteringType filteringType, bool isAsc)
+        {
+            var books = Context.Books.GetSortedBooks(filteringType, isAsc);
 
             var bookItems = books.Select(w => Mapper.BookMapper.MapToItem(w)).ToList();
 

@@ -72,6 +72,20 @@ namespace LibraryManagement.View.Modules
             Console.WriteLine();
         }
 
+        private static void PrintBookFieldSelection()
+        {
+            Console.WriteLine("Выберите поле");
+            Console.WriteLine($"{(int)BookFilteringType.ByName}. По названию книги");
+            Console.WriteLine($"{(int)BookFilteringType.ByRegNumber}. По регистрационному номеру");
+            Console.WriteLine($"{(int)BookFilteringType.ByNumberOfPages}. По количеству страниц");
+            Console.WriteLine($"{(int)BookFilteringType.ByPublicationYear}. По году публикации");
+            Console.WriteLine($"{(int)BookFilteringType.ByIsBookInLibrary}. По наличию в библиотеке");
+            Console.WriteLine($"{(int)BookFilteringType.ByPublisherName}. По названию издателя");
+            Console.WriteLine($"{(int)BookFilteringType.ByAuthorName}. По имени автора");
+            Console.WriteLine($"{(int)BookFilteringType.ByLastUserName}. По имени последнего читателя");
+        }
+
+
         public void WorkAsAdmin()
         {
             Console.Clear();
@@ -95,6 +109,7 @@ namespace LibraryManagement.View.Modules
                     }
                     case ConsoleKey.D3:
                     {
+                        BooksView();
                         break;
                     }
                     case ConsoleKey.D4:
@@ -110,7 +125,6 @@ namespace LibraryManagement.View.Modules
 
             }
         }
-
         public void BooksView()
         {
             var exitToken = true;
@@ -124,19 +138,11 @@ namespace LibraryManagement.View.Modules
                 {
                     case ConsoleKey.D1:
                     {
-                        Console.WriteLine("Вывод списка книг в отфильтрованном виде");
-                        Console.WriteLine("Выберите поле для фильтрации");
-                        Console.WriteLine($"{(int) BookFilteringType.ByName}. По названию книги");
-                        Console.WriteLine($"{(int) BookFilteringType.ByRegNumber}. По регистрационному номеру");
-                        Console.WriteLine($"{(int) BookFilteringType.ByNumberOfPages}. По количеству страниц");
-                        Console.WriteLine($"{(int) BookFilteringType.ByPublicationYear}. По году публикации");
-                        Console.WriteLine($"{(int) BookFilteringType.ByIsBookInLibrary}. По наличию в библиотеке");
-                        Console.WriteLine($"{(int) BookFilteringType.ByPublisherName}. По названию издателя");
-                        Console.WriteLine($"{(int) BookFilteringType.ByAuthorName}. По имени автора");
-                        Console.WriteLine($"{(int) BookFilteringType.ByLastUserName}. По имени последнего читателя");
+                        Console.WriteLine("Вывод списка книг в отфильтрованном по определенному полю виде");
+                        PrintBookFieldSelection();
 
                         var selectedFilteringType = ConsoleExtensions.ReadInteger((int) BookFilteringType.ByName, (int) BookFilteringType.ByLastUserName);
-                        Console.WriteLine("Введите значения для фильтрации");
+                        Console.WriteLine("Введите значение для фильтрации");
 
                         var filter = new BookFilter();
                         switch (selectedFilteringType)
@@ -197,6 +203,23 @@ namespace LibraryManagement.View.Modules
                     }
                     case ConsoleKey.D2:
                     {
+                        Console.WriteLine("Вывод списка книг в отсортированном виде");
+                        PrintBookFieldSelection();
+
+                        var selectedOrderingType = ConsoleExtensions.ReadInteger((int)BookFilteringType.ByName, (int)BookFilteringType.ByLastUserName);
+
+                        Console.WriteLine("Вывести по возрастанию? (Да, Нет)");
+                        var isAsc = ConsoleExtensions.ReadBoolean();
+
+                        var books = AdminService.GetSortedBooks((BookFilteringType) selectedOrderingType, isAsc);
+
+                        foreach (var book in books)
+                        {
+                            PrintBookInfo(book);
+                        }
+
+                        Console.WriteLine("** Нажмите любую клавишу для выхода **");
+                        Console.ReadKey();
                         break;
                     }
                     case ConsoleKey.D3:
