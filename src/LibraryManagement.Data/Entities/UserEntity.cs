@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using LibraryManagement.Common;
 using LibraryManagement.Common.Enums;
+using LibraryManagement.Common.Infrastructure;
 
 namespace LibraryManagement.Data.Entities
 {
@@ -15,6 +16,7 @@ namespace LibraryManagement.Data.Entities
         /// </summary>
         [Required]
         [MaxLength(Constants.DataAnnotationConstants.StringMaxLengthValue)]
+        [SerializationOrder(0)]
         public string Login { get; set; }
 
         /// <summary>
@@ -22,6 +24,7 @@ namespace LibraryManagement.Data.Entities
         /// </summary>
         [Required]
         [MaxLength(Constants.DataAnnotationConstants.StringMaxLengthValue)]
+        [SerializationOrder(1)]
         public string Password { get; set; }
 
         /// <summary>
@@ -29,6 +32,7 @@ namespace LibraryManagement.Data.Entities
         /// </summary>
         [Required]
         [Range((int) RoleType.Client, (int) RoleType.Admin)]
+        [SerializationOrder(2)]
         public RoleType Role { get; set; }
 
         /// <summary>
@@ -36,6 +40,7 @@ namespace LibraryManagement.Data.Entities
         /// </summary>
         [Required]
         [MaxLength(Constants.DataAnnotationConstants.LibraryCardNumberMaxLength)]
+        [SerializationOrder(3)]
         public string LibraryCardNumber { get; set; } 
 
         /// <summary>

@@ -1,9 +1,9 @@
-﻿using LibraryManagement.View.Modules;
-using System;
-using System.IO;
-using LibraryManagement.Common;
+﻿using LibraryManagement.Common;
 using LibraryManagement.Common.Enums;
 using LibraryManagement.Data;
+using LibraryManagement.View.Modules;
+using System;
+using System.IO;
 
 namespace LibraryManagement.View
 {
@@ -11,6 +11,8 @@ namespace LibraryManagement.View
     {
         private static void Main(string[] args)
         {
+            Directory.SetCurrentDirectory(Path.GetDirectoryName(typeof(Program).Assembly.Location));
+
             try
             {
                 using (var context = new DatabaseContext())

@@ -85,7 +85,6 @@ namespace LibraryManagement.View.Modules
             Console.WriteLine($"{(int)BookFilteringType.ByLastUserName}. По имени последнего читателя");
         }
 
-
         public void WorkAsAdmin()
         {
             Console.Clear();

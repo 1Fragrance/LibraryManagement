@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using LibraryManagement.Common;
+using LibraryManagement.Common.Infrastructure;
 
 namespace LibraryManagement.Data.Entities
 {
@@ -14,6 +15,7 @@ namespace LibraryManagement.Data.Entities
         /// </summary>
         [Required]
         [MaxLength(Constants.DataAnnotationConstants.StringMaxLengthValue)]
+        [SerializationOrder(0)]
         public string Name { get; set; }
 
         /// <summary>

@@ -36,5 +36,10 @@ namespace LibraryManagement.Common
             public const string Yes = "Да";
             public const string No = "Нет";
         }
+
+        public static class Serialization
+        {
+            public const string FileDelimiter = ";";
+        }
     }
 }

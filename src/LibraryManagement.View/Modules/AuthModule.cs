@@ -1,7 +1,7 @@
 ﻿using LibraryManagement.Common.Enums;
-using LibraryManagement.Core.Services;
 using LibraryManagement.Data;
 using System;
+using LibraryManagement.Core.Services.Auth;
 
 namespace LibraryManagement.View.Modules
 {

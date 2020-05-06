@@ -1,7 +1,7 @@
 ﻿using LibraryManagement.Common.Results;
 using LibraryManagement.Data;
 
-namespace LibraryManagement.Core.Services
+namespace LibraryManagement.Core.Services.Auth
 {
     public class AuthService : ServiceBase
     {
