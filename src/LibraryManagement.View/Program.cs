@@ -4,6 +4,7 @@ using LibraryManagement.Data;
 using LibraryManagement.View.Modules;
 using System;
 using System.IO;
+using LibraryManagement.Core.Services.Serialization;
 
 namespace LibraryManagement.View
 {
@@ -19,6 +20,10 @@ namespace LibraryManagement.View
                 {
                     using (var dataSource = new DbDataSource(context))
                     {
+                        var service = new FileService(dataSource);
+
+                        service.CreateFile("abc.txt");
+
                         RunProgram(dataSource);
                     }
                 }

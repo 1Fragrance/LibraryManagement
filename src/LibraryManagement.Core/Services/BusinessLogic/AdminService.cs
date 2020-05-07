@@ -1,13 +1,13 @@
-﻿using LibraryManagement.Common;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using LibraryManagement.Common;
+using LibraryManagement.Common.Enums;
 using LibraryManagement.Common.Filters;
 using LibraryManagement.Common.Items;
 using LibraryManagement.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using LibraryManagement.Common.Enums;
 
-namespace LibraryManagement.Core.Services
+namespace LibraryManagement.Core.Services.BusinessLogic
 {
     public class AdminService : ServiceBase
     {

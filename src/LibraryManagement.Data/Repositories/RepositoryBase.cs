@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace LibraryManagement.Data.Repositories
 {
-    public abstract class RepositoryBase<TEntity> where TEntity : EntityBase
+    public abstract class RepositoryBase<TEntity>  where TEntity : EntityBase
     {
         protected DatabaseContext DbContext { get; }
         protected DbSet<TEntity> DbSet { get; }
