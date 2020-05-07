@@ -25,7 +25,7 @@ namespace LibraryManagement.Common
 
         public static class LoggingConstants
         {
-            public const string FileName = "log.txt";
+            public const string FileName = "LogFile.log";
         }
 
         public static class OperationConstants

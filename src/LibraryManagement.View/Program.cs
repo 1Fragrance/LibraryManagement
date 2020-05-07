@@ -1,12 +1,11 @@
 ﻿using LibraryManagement.Common;
 using LibraryManagement.Common.Enums;
-using LibraryManagement.Data;
-using LibraryManagement.View.Modules;
-using System;
-using System.IO;
 using LibraryManagement.Core.Services.Serialization;
+using LibraryManagement.Data;
 using LibraryManagement.View.Modules.Auth;
 using LibraryManagement.View.Modules.BusinessLogic;
+using System;
+using System.IO;
 
 namespace LibraryManagement.View
 {
@@ -32,6 +31,9 @@ namespace LibraryManagement.View
             }
             catch (Exception ex)
             {
+                #if DEBUG
+                    Console.WriteLine(ex.Message);
+                #endif
                 LogToFile(ex.Message);
             }
         }

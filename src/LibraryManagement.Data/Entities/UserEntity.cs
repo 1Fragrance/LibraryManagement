@@ -40,6 +40,7 @@ namespace LibraryManagement.Data.Entities
         /// </summary>
         [Required]
         [MaxLength(Constants.DataAnnotationConstants.LibraryCardNumberMaxLength)]
+        [MinLength(Constants.DataAnnotationConstants.LibraryCardNumberMaxLength)]
         [SerializationOrder(3)]
         public string LibraryCardNumber { get; set; } 
 
