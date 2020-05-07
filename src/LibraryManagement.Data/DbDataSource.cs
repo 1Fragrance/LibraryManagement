@@ -1,5 +1,6 @@
-﻿using LibraryManagement.Data.Repositories;
-using System;
+﻿using System;
+using System.Transactions;
+using LibraryManagement.Data.Repositories;
 
 namespace LibraryManagement.Data
 {
@@ -21,5 +22,30 @@ namespace LibraryManagement.Data
         {
             Context?.Dispose();
         }
+
+        protected void BeginTransaction()
+        {
+            if (Context.Database.CurrentTransaction == null)
+            {
+                Context.Database.BeginTransaction();
+            }
+        }
+
+        protected void CommitTransaction()
+        {
+            if (Context.Database.CurrentTransaction != null)
+            {
+                Context.Database.CommitTransaction();
+            }
+        }
+
+        protected void RollbackTransaction()
+        {
+            if (Context.Database.CurrentTransaction != null)
+            {
+                Context.Database.RollbackTransaction();
+            }
+        }
+
     }
 }

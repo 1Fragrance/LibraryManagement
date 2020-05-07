@@ -31,6 +31,8 @@ namespace LibraryManagement.Core.Services.Serialization
 
         public FileParseResult ReadFile(string fileName)
         {
+
+            // TODO: Add file exist check
             var strings = File.ReadAllLines(fileName).ToList();
 
             for (var i = 1; i <= strings.Count; i++)

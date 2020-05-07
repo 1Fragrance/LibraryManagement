@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using LibraryManagement.Common;
+using LibraryManagement.Common.Attributes;
 using LibraryManagement.Common.Enums;
-using LibraryManagement.Common.Infrastructure;
 
 namespace LibraryManagement.Data.Entities
 {

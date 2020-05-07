@@ -1,7 +1,7 @@
 ﻿using LibraryManagement.Common;
-using LibraryManagement.Common.Infrastructure;
 using System;
 using System.ComponentModel.DataAnnotations;
+using LibraryManagement.Common.Attributes;
 
 namespace LibraryManagement.Data.Entities
 {

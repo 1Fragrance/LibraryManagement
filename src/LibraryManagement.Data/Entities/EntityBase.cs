@@ -1,8 +1,8 @@
 ﻿using LibraryManagement.Common;
-using LibraryManagement.Common.Infrastructure;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using LibraryManagement.Common.Attributes;
 
 namespace LibraryManagement.Data.Entities
 {
