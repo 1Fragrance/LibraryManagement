@@ -23,7 +23,7 @@ namespace LibraryManagement.Data
             Context?.Dispose();
         }
 
-        protected void BeginTransaction()
+        public void BeginTransaction()
         {
             if (Context.Database.CurrentTransaction == null)
             {
@@ -31,7 +31,7 @@ namespace LibraryManagement.Data
             }
         }
 
-        protected void CommitTransaction()
+        public void CommitTransaction()
         {
             if (Context.Database.CurrentTransaction != null)
             {
@@ -39,7 +39,7 @@ namespace LibraryManagement.Data
             }
         }
 
-        protected void RollbackTransaction()
+        public void RollbackTransaction()
         {
             if (Context.Database.CurrentTransaction != null)
             {

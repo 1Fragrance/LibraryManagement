@@ -18,6 +18,12 @@ namespace LibraryManagement.Data.Repositories
             DbContext = dbContext;
         }
 
+        // NOTE: Only suitable for small tables (about 1000 rows)
+        public void ClearTable()
+        {
+            DbSet.RemoveRange(DbSet);
+        }
+
         public IList<TEntity> GetList()
         {
             return DbSet.ToList();
@@ -34,6 +40,12 @@ namespace LibraryManagement.Data.Repositories
 
             DbContext.Entry(entity).State = isRecordExist ? EntityState.Modified : EntityState.Added;
 
+            DbContext.SaveChanges();
+        }
+
+        public void CreateEntity(TEntity entity)
+        {
+            DbContext.Entry(entity).State = EntityState.Added;
             DbContext.SaveChanges();
         }
 

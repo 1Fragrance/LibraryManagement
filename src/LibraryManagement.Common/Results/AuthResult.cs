@@ -2,7 +2,7 @@
 
 namespace LibraryManagement.Common.Results
 {
-    public class AuthResult : ResultBase
+    public class AuthResult : ExecutionResult
     {
         public RoleType? Role { get; set; }
     }

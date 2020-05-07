@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace LibraryManagement.Common.Results
 {
-    public class ResultBase
+    public class ExecutionResult
     {
         private bool? _success;
 

@@ -11,8 +11,6 @@ namespace LibraryManagement.Core.Services.Auth
 
         public AuthResult SignIn(string login, string password)
         {
-            //TODO: validation 
-
             var userEntity = Context.Users.GetUser(login, password);
 
             if (userEntity == null)

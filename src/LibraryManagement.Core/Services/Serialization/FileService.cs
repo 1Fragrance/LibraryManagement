@@ -19,112 +19,157 @@ namespace LibraryManagement.Core.Services.Serialization
         public IDictionary<int, string> GetCurrentFiles()
         {
             return Directory.GetFiles(Directory.GetCurrentDirectory())
+                .Where(w => w.EndsWith(Constants.Serialization.FileExtension))
                 .Select((value, index) => new {index, value})
                 .ToDictionary(w => w.index, w => w.value);
         }
 
-        public void DeleteFile(string filePath)
+        public ExecutionResult DeleteFile(string filePath)
         {
-            // TODO: File not found result
+            if (!File.Exists(filePath))
+            {
+                return BadResult("Ошибка чтения. Такого файла не существует");
+            }
+
             File.Delete(filePath);
+
+            return SuccessResult();
         }
 
-        public FileParseResult ReadFile(string fileName)
+        public ExecutionResult ReadFile(string filePath)
         {
-
-            // TODO: Add file exist check
-            var strings = File.ReadAllLines(fileName).ToList();
-
-            for (var i = 1; i <= strings.Count; i++)
+            if (!File.Exists(filePath))
             {
-                var str = strings[i];
-                var recordFields = str.Split(Constants.Serialization.FileDelimiter);
+                return BadResult("Ошибка чтения. Такого файла не существует");
+            }
 
-                // TODO: Begin transaction
-                // TODO: Try shell
-                switch (recordFields[0])
+            var strings = File.ReadAllLines(filePath).ToList();
+
+            int index = default;
+            try
+            {
+                Context.BeginTransaction();
+
+                Context.Books.ClearTable();
+                Context.Users.ClearTable();
+                Context.Publishers.ClearTable();
+                Context.Authors.ClearTable();
+
+                for (index = 0; index < strings.Count; index++)
                 {
-                    // TODO: Count validation
-                    // TODO: Type validation
-                    //
-                    case nameof(AuthorEntity):
-                    {
-                        var authorEntity = new AuthorEntity
-                        {
-                            Id = Convert.ToInt32(recordFields[1]),
-                            Name = recordFields[2],
-                            Surname = recordFields[3],
-                            Patronymic = recordFields[4]
-                        };
+                    var str = strings[index];
+                    var recordFields = str.Split(Constants.Serialization.FileDelimiter);
 
-                        Context.Authors.Save(authorEntity);
-                        break;
-                    }
-                    case nameof(PublisherEntity):
+                    switch (recordFields[0])
                     {
-                        var publisherEntity = new PublisherEntity
+                        case nameof(AuthorEntity):
                         {
-                            Id = Convert.ToInt32(recordFields[1]),
-                            Name = recordFields[2]
-                        };
+                            if (recordFields.Length != Constants.DataAnnotationConstants.AuthorTableColumnsCount)
+                            {
+                                return FileParseBadResult($"Ошибка чтения. Некорректная запись на строке {index + 1}");
+                            }
 
-                        Context.Publishers.Save(publisherEntity);
-                        break;
-                    }
-                    case nameof(UserEntity):
-                    {
-                        var userEntity = new UserEntity
-                        {
-                            Id = Convert.ToInt32(recordFields[1]),
-                            Login = recordFields[2],
-                            Password = recordFields[3],
-                            Role = (RoleType) Convert.ToInt32(recordFields[4]),
-                            LibraryCardNumber = recordFields[5]
-                        };
+                            var authorEntity = new AuthorEntity
+                            {
+                                Id = Convert.ToInt32(recordFields[1]),
+                                Name = recordFields[2],
+                                Surname = recordFields[3],
+                                Patronymic = recordFields[4]
+                            };
 
-                        Context.Users.Save(userEntity);
-                        break;
-                    }
-                    case nameof(BookEntity):
-                    {
-                        var bookEntity = new BookEntity
+                            Context.Authors.CreateEntity(authorEntity);
+                            break;
+                        }
+                        case nameof(PublisherEntity):
                         {
-                            Id = Convert.ToInt32(recordFields[1]),
-                            RegNumber = recordFields[2],
-                            Name = recordFields[3],
-                            NumberOfPages = Convert.ToInt32(recordFields[4]),
-                            PublicationYear = Convert.ToInt32(recordFields[5]),
-                            IsBookInLibrary = Convert.ToBoolean(recordFields[6]),
-                            PublisherId = Convert.ToInt32(recordFields[7]),
-                            AuthorId = Convert.ToInt32(recordFields[8]),
-                            LastUserId = Convert.ToInt32(recordFields[9])
-                        };
+                            if (recordFields.Length != Constants.DataAnnotationConstants.PublisherTableColumnsCount)
+                            {
+                                return FileParseBadResult($"Ошибка чтения. Некорректная запись на строке {index + 1}");
+                            }
 
-                        Context.Books.Save(bookEntity);
-                        break;
-                    }
-                    default:
-                    {
-                        // TODO: Rollback transaction
-                        return new FileParseResult
+                            var publisherEntity = new PublisherEntity
+                            {
+                                Id = Convert.ToInt32(recordFields[1]),
+                                Name = recordFields[2]
+                            };
+
+                            Context.Publishers.CreateEntity(publisherEntity);
+                            break;
+                        }
+                        case nameof(UserEntity):
                         {
-                            IsSuccess = false,
-                            InvalidRecordLineNumber = i
-                        };
+                            if (recordFields.Length != Constants.DataAnnotationConstants.UserTableColumnsCount)
+                            {
+                                return FileParseBadResult($"Ошибка чтения. Некорректная запись на строке {index + 1}");
+                            }
+
+                            var userEntity = new UserEntity
+                            {
+                                Id = Convert.ToInt32(recordFields[1]),
+                                Login = recordFields[2],
+                                Password = recordFields[3],
+                                Role = (RoleType) Convert.ToInt32(recordFields[4]),
+                                LibraryCardNumber = recordFields[5]
+                            };
+
+                            Context.Users.CreateEntity(userEntity);
+                            break;
+                        }
+                        case nameof(BookEntity):
+                        {
+                            if (recordFields.Length != Constants.DataAnnotationConstants.BookTableColumnsCount)
+                            {
+                                return FileParseBadResult($"Ошибка чтения. Некорректная запись на строке {index + 1}");
+                            }
+
+                            var bookEntity = new BookEntity
+                            {
+                                Id = Convert.ToInt32(recordFields[1]),
+                                RegNumber = recordFields[2],
+                                Name = recordFields[3],
+                                NumberOfPages = Convert.ToInt32(recordFields[4]),
+                                PublicationYear = Convert.ToInt32(recordFields[5]),
+                                IsBookInLibrary = Convert.ToBoolean(recordFields[6]),
+                                PublisherId = Convert.ToInt32(recordFields[7]),
+                                AuthorId = Convert.ToInt32(recordFields[8]),
+                                LastUserId = Convert.ToInt32(recordFields[9])
+                            };
+
+                            Context.Books.CreateEntity(bookEntity);
+                            break;
+                        }
+                        default:
+                        {
+                            return FileParseBadResult($"Ошибка чтения. Некорректная запись на строке {index + 1}");
+                        }
                     }
                 }
             }
-
-            return new FileParseResult
+            catch (Exception)
             {
-                IsSuccess = true
-            };
+                return FileParseBadResult($"Формат файла нарушен. Ошибка на строке: {index + 1}");
+            }
+
+            Context.CommitTransaction();
+            return SuccessResult();
         }
 
-        public void CreateFile(string fileName)
+        public ExecutionResult FileParseBadResult(string message)
         {
-            // TODO: Add file existing checking
-            using (var sw = new StreamWriter(fileName, true))
+            Context.RollbackTransaction();
+            return BadResult(message);
+        }
+
+        public ExecutionResult CreateFile(string fileName)
+        {
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), fileName + Constants.Serialization.FileExtension);
+
+            if (File.Exists(filePath))
+            {
+                return BadResult("Файл с таким названием уже существует");
+            }
+
+            using (var sw = new StreamWriter(filePath, true))
             {
                 var authors = Context.Authors.GetList();
                 var publishers = Context.Publishers.GetList();
@@ -151,6 +196,8 @@ namespace LibraryManagement.Core.Services.Serialization
                     sw.WriteLine(book.GetEntityDescriptionString());
                 }
             }
+
+            return SuccessResult();
         }
     }
 }

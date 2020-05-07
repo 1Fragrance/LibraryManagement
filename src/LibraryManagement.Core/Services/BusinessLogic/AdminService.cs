@@ -13,7 +13,6 @@ namespace LibraryManagement.Core.Services.BusinessLogic
     {
         private Mapper Mapper { get;  }
 
-
         public AdminService(DbDataSource context) : base(context)
         {
             Mapper = new Mapper();

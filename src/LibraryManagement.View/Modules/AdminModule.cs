@@ -1,12 +1,12 @@
-﻿using LibraryManagement.Core.Services;
-using System;
-using System.Linq;
-using LibraryManagement.Common;
+﻿using LibraryManagement.Common;
 using LibraryManagement.Common.Enums;
 using LibraryManagement.Common.Filters;
 using LibraryManagement.Common.Items;
 using LibraryManagement.Core.Services.BusinessLogic;
+using LibraryManagement.Core.Services.Serialization;
 using LibraryManagement.Data;
+using System;
+using System.Linq;
 using Console = System.Console;
 
 namespace LibraryManagement.View.Modules
@@ -14,10 +14,12 @@ namespace LibraryManagement.View.Modules
     public class AdminModule : ModuleBase
     {
         private AdminService AdminService { get; }
+        private FileService FileService { get; }
 
         public AdminModule(DbDataSource dataSource)
         {
             AdminService = new AdminService(dataSource);
+            FileService = new FileService(dataSource);
         }
 
         public void PrintMainMenu()
@@ -46,8 +48,10 @@ namespace LibraryManagement.View.Modules
         {
             Console.WriteLine("Работа с файлом данных");
             Console.WriteLine("1. Создание файла");
-            Console.WriteLine("2. Открытие существующего файла");
-            Console.WriteLine("3. Удаление файла");
+            Console.WriteLine("2. Просмотр существующих файлов");
+            Console.WriteLine("3. Загрузка данных из существующего файла");
+            Console.WriteLine("4. Удаление файла");
+            Console.WriteLine("5. Назад");
             Console.WriteLine();
         }
 
@@ -125,6 +129,179 @@ namespace LibraryManagement.View.Modules
 
             }
         }
+
+        public void FileManagement()
+        {
+            var exitToken = true;
+            while (exitToken)
+            {
+                Console.Clear();
+                PrintFileManagementMenu();
+
+                var choice = Console.ReadKey();
+
+                switch (choice.Key)
+                {
+                    case ConsoleKey.D1:
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Создание файла");
+                        Console.WriteLine("Введите название файла:");
+                        var fileName = Console.ReadLine();
+
+                        var result = FileService.CreateFile(fileName);
+
+                        if (!result.IsSuccess)
+                        {
+                            foreach (var error in result.Errors)
+                            {
+                                Console.WriteLine(error);
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("Файл успешно создан");
+                        }
+
+                        Console.WriteLine("** Нажмите любую клавишу для выхода **");
+                        Console.ReadKey();
+
+                        break;
+                    }
+
+                    case ConsoleKey.D2:
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Просмотр существующих файлов");
+
+                        var fileInfos = FileService.GetCurrentFiles();
+
+                        if (fileInfos == null || fileInfos.Count == 0)
+                        {
+                            Console.WriteLine("На текущий момент нет файлов с данными");
+                        }
+                        else
+                        {
+                            foreach (var (fileId, fileName) in fileInfos)
+                            {
+                                Console.WriteLine($"{fileId}. {fileName}");
+                            }
+                        }
+
+                        Console.WriteLine("** Нажмите любую клавишу для выхода **");
+                        Console.ReadKey();
+
+                        break;
+                    }
+
+                    case ConsoleKey.D3:
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Загрузка данных из существующего файла");
+                        Console.WriteLine("Выберите номер файла");
+                        Console.WriteLine($"Для выхода нажмите {Constants.OperationConstants.ReturnOperationId}");
+                        Console.WriteLine("!!! Внимание, данное действие сотрет все несохраненные данные");
+
+                        var fileInfos = FileService.GetCurrentFiles();
+
+                        if (fileInfos == null || fileInfos.Count == 0)
+                        {
+                            Console.WriteLine("На текущий момент нет файлов с данными");
+                        }
+                        else
+                        {
+                            foreach (var (fileId, fileName) in fileInfos)
+                            {
+                                Console.WriteLine($"{fileId}. {fileName}");
+                            }
+
+                            var fileSelection = ConsoleExtensions.ReadInteger(Constants.OperationConstants.ReturnOperationId, fileInfos.Keys.Max());
+
+                            if (fileSelection == Constants.OperationConstants.ReturnOperationId)
+                            {
+                                break;
+                            }
+
+                            var result = FileService.ReadFile(fileInfos[fileSelection]);
+
+                            if (!result.IsSuccess)
+                            {
+                                foreach (var error in result.Errors)
+                                {
+                                    Console.WriteLine(error);
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine("Операция прошла успешно");
+                            }
+                        }
+
+                        Console.WriteLine("** Нажмите любую клавишу для выхода **");
+                        Console.ReadKey();
+                        break;
+                    }
+
+                    case ConsoleKey.D4:
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Удаление файла");
+                        Console.WriteLine("Выберите номер файла");
+                        Console.WriteLine($"Для выхода нажмите {Constants.OperationConstants.ReturnOperationId}");
+
+                        var fileInfos = FileService.GetCurrentFiles();
+
+                        if (fileInfos == null || fileInfos.Count == 0)
+                        {
+                            Console.WriteLine("На текущий момент нет файлов с данными");
+                        }
+                        else
+                        {
+                            foreach (var (fileId, fileName) in fileInfos)
+                            {
+                                Console.WriteLine($"{fileId}. {fileName}");
+                            }
+
+                            var fileSelection = ConsoleExtensions.ReadInteger(Constants.OperationConstants.ReturnOperationId, fileInfos.Keys.Max());
+
+                            if (fileSelection == Constants.OperationConstants.ReturnOperationId)
+                            {
+                                break;
+                            }
+
+                            var result = FileService.DeleteFile(fileInfos[fileSelection]);
+
+                            if (!result.IsSuccess)
+                            {
+                                foreach (var error in result.Errors)
+                                {
+                                    Console.WriteLine(error);
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine("Операция прошла успешно");
+                            }
+                        }
+
+                        Console.WriteLine("** Нажмите любую клавишу для выхода **");
+                        Console.ReadKey();
+                        break;
+                    }
+                    case ConsoleKey.D5:
+                    {
+                        exitToken = false;
+                        break;
+                    }
+                    default:
+                    {
+                        Console.WriteLine("** Некорректный ввод **");
+                        break;
+                    }
+                }
+            }
+        }
+
         public void BooksView()
         {
             var exitToken = true;
