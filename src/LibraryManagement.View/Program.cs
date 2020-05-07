@@ -5,6 +5,8 @@ using LibraryManagement.View.Modules;
 using System;
 using System.IO;
 using LibraryManagement.Core.Services.Serialization;
+using LibraryManagement.View.Modules.Auth;
+using LibraryManagement.View.Modules.BusinessLogic;
 
 namespace LibraryManagement.View
 {
@@ -53,6 +55,7 @@ namespace LibraryManagement.View
                 case RoleType.Client:
                 {
                     var clientModule = new ClientModule(dataSource);
+                    clientModule.WorkAsClient();
 
                     break;
                 }

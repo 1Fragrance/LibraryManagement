@@ -1,6 +1,5 @@
 ﻿using LibraryManagement.Common;
 using LibraryManagement.Common.Enums;
-using LibraryManagement.Common.Filters;
 using LibraryManagement.Common.Items;
 using LibraryManagement.Core.Services.BusinessLogic;
 using LibraryManagement.Core.Services.Serialization;
@@ -9,20 +8,19 @@ using System;
 using System.Linq;
 using Console = System.Console;
 
-namespace LibraryManagement.View.Modules
+namespace LibraryManagement.View.Modules.BusinessLogic
 {
-    public class AdminModule : ModuleBase
+    public class AdminModule : BusinessLogicModuleBase<AdminService>
     {
-        private AdminService AdminService { get; }
         private FileService FileService { get; }
 
         public AdminModule(DbDataSource dataSource)
         {
-            AdminService = new AdminService(dataSource);
+            BusinessService = new AdminService(dataSource);
             FileService = new FileService(dataSource);
         }
 
-        public void PrintMainMenu()
+        public override void PrintMainMenu()
         {
             Console.WriteLine("Система администрирования библиотекой");
             Console.WriteLine("1. Управление учетными записями пользователей");
@@ -58,36 +56,11 @@ namespace LibraryManagement.View.Modules
         public void PrintBooksManagementMenu()
         {
             Console.WriteLine("Управление базой данных");
-            Console.WriteLine("1. Просмотр всех добавленных книг");
-            Console.WriteLine("2. Добавление новой книги в базу");
-            Console.WriteLine("3. Редактирование информации о книге");
-            Console.WriteLine("4. Удаление книги из базы");
-            Console.WriteLine("5. Назад");
+            Console.WriteLine("1. Добавление новой книги в базу");
+            Console.WriteLine("2. Редактирование информации о книге");
+            Console.WriteLine("3. Удаление книги из базы");
+            Console.WriteLine("4. Назад");
             Console.WriteLine();
-        }
-
-        public void PrintBooksViewMenu()
-        {
-            Console.WriteLine("Просмотр базы данных");
-            Console.WriteLine("1. Вывод книг с фильтрацией по заданному полю");
-            Console.WriteLine("2. Вывод книг в отсортированном виде");
-            Console.WriteLine("3. Вывод книг в алфавитном порядке, изданных после заданного года");
-            Console.WriteLine("4. Вывод книг находящихся в текущий момент у читателей");
-            Console.WriteLine("5. Назад");
-            Console.WriteLine();
-        }
-
-        private static void PrintBookFieldSelection()
-        {
-            Console.WriteLine("Выберите поле");
-            Console.WriteLine($"{(int)BookFilteringType.ByName}. По названию книги");
-            Console.WriteLine($"{(int)BookFilteringType.ByRegNumber}. По регистрационному номеру");
-            Console.WriteLine($"{(int)BookFilteringType.ByNumberOfPages}. По количеству страниц");
-            Console.WriteLine($"{(int)BookFilteringType.ByPublicationYear}. По году публикации");
-            Console.WriteLine($"{(int)BookFilteringType.ByIsBookInLibrary}. По наличию в библиотеке");
-            Console.WriteLine($"{(int)BookFilteringType.ByPublisherName}. По названию издателя");
-            Console.WriteLine($"{(int)BookFilteringType.ByAuthorName}. По имени автора");
-            Console.WriteLine($"{(int)BookFilteringType.ByLastUserName}. По имени последнего читателя");
         }
 
         public void WorkAsAdmin()
@@ -118,6 +91,7 @@ namespace LibraryManagement.View.Modules
                     }
                     case ConsoleKey.D4:
                     {
+                        FileManagement();
                         break;
                     }
                     case ConsoleKey.D5:
@@ -126,8 +100,8 @@ namespace LibraryManagement.View.Modules
                         break;
                     }
                 }
-
             }
+            // ReSharper disable once FunctionNeverReturns
         }
 
         public void FileManagement()
@@ -302,157 +276,6 @@ namespace LibraryManagement.View.Modules
             }
         }
 
-        public void BooksView()
-        {
-            var exitToken = true;
-            while (exitToken)
-            {
-                Console.Clear();
-                PrintBooksViewMenu();
-
-                var choice = Console.ReadKey();
-                switch (choice.Key)
-                {
-                    case ConsoleKey.D1:
-                    {
-                        Console.Clear();
-                        Console.WriteLine("Вывод списка книг в отфильтрованном по определенному полю виде");
-                        PrintBookFieldSelection();
-
-                        var selectedFilteringType = ConsoleExtensions.ReadInteger((int) BookFilteringType.ByName, (int) BookFilteringType.ByLastUserName);
-                        Console.WriteLine("Введите значение для фильтрации");
-
-                        var filter = new BookFilter();
-                        switch (selectedFilteringType)
-                        {
-                            case (int) BookFilteringType.ByName:
-                            {
-                                filter.Name = Console.ReadLine();
-                                break;
-                            }
-                            case (int) BookFilteringType.ByRegNumber:
-                            {
-                                filter.RegNumber = Console.ReadLine();
-                                break;
-                            }
-                            case (int) BookFilteringType.ByNumberOfPages:
-                            {
-                                filter.NumberOfPages = ConsoleExtensions.ReadInteger();
-                                break;
-                            }
-                            case (int) BookFilteringType.ByPublicationYear:
-                            {
-                                filter.PublicationYear = ConsoleExtensions.ReadInteger();
-                                break;
-                            }
-                            case (int) BookFilteringType.ByIsBookInLibrary:
-                            {
-                                Console.WriteLine("Введите либо {0}, либо {1}", Constants.Strings.Yes, Constants.Strings.No);
-                                filter.IsBookInLibrary = ConsoleExtensions.ReadBoolean();
-                                break;
-                            }
-                            case (int) BookFilteringType.ByPublisherName:
-                            {
-                                filter.PublisherName = Console.ReadLine();
-                                break;
-                            }
-                            case (int) BookFilteringType.ByAuthorName:
-                            {
-                                filter.AuthorName = Console.ReadLine();
-                                break;
-                            }
-                            case (int) BookFilteringType.ByLastUserName:
-                            {
-                                filter.LastUserName = Console.ReadLine();
-                                break;
-                            }
-                        }
-
-                        var books = AdminService.GetFilteredBooks(filter);
-
-                        foreach (var book in books)
-                        {
-                            PrintBookInfo(book);
-                        }
-
-                        Console.WriteLine("** Нажмите любую клавишу для выхода **");
-                        Console.ReadKey();
-                        break;
-                    }
-                    case ConsoleKey.D2:
-                    {
-                        Console.Clear();
-                        Console.WriteLine("Вывод списка книг в отсортированном виде");
-                        PrintBookFieldSelection();
-
-                        var selectedOrderingType = ConsoleExtensions.ReadInteger((int)BookFilteringType.ByName, (int)BookFilteringType.ByLastUserName);
-
-                        Console.WriteLine("Вывести по возрастанию? (Да, Нет)");
-                        var isAsc = ConsoleExtensions.ReadBoolean();
-
-                        var books = AdminService.GetSortedBooks((BookFilteringType) selectedOrderingType, isAsc);
-
-                        foreach (var book in books)
-                        {
-                            PrintBookInfo(book);
-                        }
-
-                        Console.WriteLine("** Нажмите любую клавишу для выхода **");
-                        Console.ReadKey();
-                        break;
-                    }
-
-                    case ConsoleKey.D3:
-                    {
-                        Console.Clear();
-                        Console.WriteLine("Вывод книг в алфавитном порядке, изданных после заданного года");
-                        Console.WriteLine("Введите год:");
-
-                        var selectedYear = ConsoleExtensions.ReadInteger();
-
-                        var books = AdminService.GetOrderedBooksAfterSelectedYear(selectedYear);
-
-                        foreach (var book in books)
-                        {
-                            PrintBookInfo(book);
-                        }
-
-                        Console.WriteLine("** Нажмите любую клавишу для выхода **");
-                        Console.ReadKey();
-
-                        break;
-                    }
-                    case ConsoleKey.D4:
-                    {
-                        Console.Clear();
-                        Console.WriteLine("Вывод книг находящихся в текущий момент у читателей");
-
-                        var books = AdminService.GetAlreadyTakenBooks();
-                        foreach (var book in books)
-                        {
-                            PrintBookInfo(book);
-                        }
-
-                        Console.WriteLine("** Нажмите любую клавишу для выхода **");
-                        Console.ReadKey();
-
-                        break;
-                    }
-                    case ConsoleKey.D5:
-                    {
-                        exitToken = false;
-                        break;
-                    }
-                    default:
-                    {
-                        Console.WriteLine("** Некорректный ввод **");
-                        break;
-                    }
-                }
-            }
-
-        }
-
         public void BooksManagement()
         {
             var exitToken = true;
@@ -467,30 +290,15 @@ namespace LibraryManagement.View.Modules
                     case ConsoleKey.D1:
                         {
                             Console.Clear();
-
-                            var books = AdminService.GetBooksWithEverything();
-                            foreach (var book in books)
-                            {
-                                PrintBookInfo(book);
-                            }
-
-                            Console.WriteLine("* Нажмите любую клавишу для выхода *");
-                            Console.ReadKey();
-                            break;
-                        }
-
-                    case ConsoleKey.D2:
-                        {
-                            Console.Clear();
                             Console.WriteLine("Добавление новой книги в базу");
 
                             var bookItem = CreateOrUpdateBook();
 
-                            AdminService.CreateBook(bookItem);
+                            BusinessService.CreateBook(bookItem);
                             break;
                         }
 
-                    case ConsoleKey.D3:
+                    case ConsoleKey.D2:
                         {
                             Console.Clear();
                             Console.WriteLine("Редактирование существующей книги");
@@ -501,12 +309,12 @@ namespace LibraryManagement.View.Modules
                             var bookItem = CreateOrUpdateBook();
                             bookItem.Id = selectedBookId;
 
-                            AdminService.UpdateBook(bookItem);
+                            BusinessService.UpdateBook(bookItem);
 
                             break;
                         }
 
-                    case ConsoleKey.D4:
+                    case ConsoleKey.D3:
                         {
                             Console.Clear();
                             Console.WriteLine("Удаление книги из базы данных");
@@ -514,10 +322,10 @@ namespace LibraryManagement.View.Modules
 
                             var selectedBookId = SelectBookFromList();
 
-                            AdminService.DeleteBook(selectedBookId);
+                            BusinessService.DeleteBook(selectedBookId);
                             break;
                         }
-                    case ConsoleKey.D5:
+                    case ConsoleKey.D4:
                     {
                         exitToken = false;
                         break;
@@ -636,7 +444,7 @@ namespace LibraryManagement.View.Modules
                         {
                             Console.Clear();
 
-                            var users = AdminService.GetUserListWithBooks();
+                            var users = BusinessService.GetUserListWithBooks();
                             foreach (var user in users)
                             {
                                 Console.WriteLine($"Id: {user.Id}");
@@ -677,7 +485,7 @@ namespace LibraryManagement.View.Modules
                                 Role = roleType
                             };
 
-                            AdminService.CreateUser(userItem);
+                            BusinessService.CreateUser(userItem);
                             break;
                         }
 
@@ -710,7 +518,7 @@ namespace LibraryManagement.View.Modules
                                 Role = roleType
                             };
 
-                            AdminService.UpdateUser(userItem);
+                            BusinessService.UpdateUser(userItem);
 
                             break;
                         }
@@ -723,7 +531,7 @@ namespace LibraryManagement.View.Modules
 
                             var selectedUserId = SelectUserFromList();
 
-                            AdminService.DeleteUser(selectedUserId);
+                            BusinessService.DeleteUser(selectedUserId);
                             break;
                         }
                     case ConsoleKey.D5:
@@ -742,7 +550,7 @@ namespace LibraryManagement.View.Modules
 
         private int SelectUserFromList()
         {
-            var users = AdminService.GetUsers();
+            var users = BusinessService.GetUsers();
 
             foreach (var user in users)
             {
@@ -756,7 +564,7 @@ namespace LibraryManagement.View.Modules
 
         private int SelectAuthorFromList()
         {
-            var authors = AdminService.GetAuthors();
+            var authors = BusinessService.GetAuthors();
 
             foreach (var author in authors)
             {
@@ -770,7 +578,7 @@ namespace LibraryManagement.View.Modules
 
         private int SelectPublisherFromList()
         {
-            var publishers = AdminService.GetPublishers();
+            var publishers = BusinessService.GetPublishers();
 
             foreach (var publisher in publishers)
             {
@@ -784,7 +592,7 @@ namespace LibraryManagement.View.Modules
 
         private int SelectBookFromList()
         {
-            var books = AdminService.GetBooks();
+            var books = BusinessService.GetBooks();
 
             foreach (var book in books)
             {
@@ -809,7 +617,7 @@ namespace LibraryManagement.View.Modules
 
                 if (input.Length == Constants.DataAnnotationConstants.LibraryCardNumberMaxLength)
                 {
-                    if (AdminService.IsClientCardExist(input, userId) == false)
+                    if (BusinessService.IsClientCardExist(input, userId) == false)
                     {
                         return input;
                     }
@@ -835,21 +643,6 @@ namespace LibraryManagement.View.Modules
         {
             Console.WriteLine("Введите имя издателя:");
             publisherItem.Name = Console.ReadLine();
-        }
-
-        private static void PrintBookInfo(BookItem book)
-        {
-            Console.WriteLine($"Id: {book.Id}");
-            Console.WriteLine($"Регистрационный номер: {book.RegNumber}");
-            Console.WriteLine($"Название: {book.Name}");
-            Console.WriteLine($"Автор: {book.Author?.DisplayName}");
-            Console.WriteLine($"Количество страниц: {book.NumberOfPages}");
-            Console.WriteLine($"Год издания: {book.PublicationYear}");
-            Console.WriteLine($"Издательство: {book.Publisher?.Name}");
-            Console.WriteLine($"На руках у читателя: {(book.IsBookInLibrary ? "Нет" : "Да")}");
-            Console.WriteLine($"Номер читательского билета последнего читателя {book.LastUser?.LibraryCardNumber}");
-
-            Console.WriteLine();
         }
     }
 }

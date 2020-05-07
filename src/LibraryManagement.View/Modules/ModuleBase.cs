@@ -1,6 +1,7 @@
 ﻿namespace LibraryManagement.View.Modules
 {
-    public class ModuleBase
+    public abstract class ModuleBase
     {
+        public abstract void PrintMainMenu();
     }
 }

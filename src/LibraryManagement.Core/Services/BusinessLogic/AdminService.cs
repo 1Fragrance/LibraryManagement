@@ -1,57 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using LibraryManagement.Common;
-using LibraryManagement.Common.Enums;
-using LibraryManagement.Common.Filters;
+﻿using LibraryManagement.Common;
 using LibraryManagement.Common.Items;
 using LibraryManagement.Data;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace LibraryManagement.Core.Services.BusinessLogic
 {
-    public class AdminService : ServiceBase
+    public class AdminService : BusinessLogicServiceBase
     {
-        private Mapper Mapper { get;  }
-
         public AdminService(DbDataSource context) : base(context)
         {
-            Mapper = new Mapper();
-        }
-
-        public IList<BookItem> GetAlreadyTakenBooks()
-        {
-            var books = Context.Books.GetFilteredBooks(new BookFilter {IsBookInLibrary = false});
-
-            var bookItems = books.Select(w => Mapper.BookMapper.MapToItem(w)).ToList();
-
-            return bookItems;
-        }
-
-        public IList<BookItem> GetOrderedBooksAfterSelectedYear(int year)
-        {
-            var books = Context.Books.GetOrderedBooksAfterSelectedYear(year);
-
-            var bookItems = books.Select(w => Mapper.BookMapper.MapToItem(w)).ToList();
-
-            return bookItems;
-        }
-
-        public IList<BookItem> GetFilteredBooks(BookFilter filter)
-        {
-            var books = Context.Books.GetFilteredBooks(filter);
-
-            var bookItems = books.Select(w => Mapper.BookMapper.MapToItem(w)).ToList();
-
-            return bookItems;
-        }
-
-        public IList<BookItem> GetSortedBooks(BookFilteringType filteringType, bool isAsc)
-        {
-            var books = Context.Books.GetSortedBooks(filteringType, isAsc);
-
-            var bookItems = books.Select(w => Mapper.BookMapper.MapToItem(w)).ToList();
-
-            return bookItems;
         }
 
         public void UpdateBook(BookItem bookItem)
@@ -101,15 +60,6 @@ namespace LibraryManagement.Core.Services.BusinessLogic
         public void DeleteBook(int id)
         {
             Context.Books.Delete(id);
-        }
-
-        public IList<BookItem> GetBooksWithEverything()
-        {
-            var books = Context.Books.GetBooksIncludeAll();
-
-            var bookItemList = books.Select(w => Mapper.BookMapper.MapToItem(w)).ToList();
-
-            return bookItemList;
         }
 
         public IList<BookItem> GetBooks()

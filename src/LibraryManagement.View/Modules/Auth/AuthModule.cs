@@ -1,9 +1,9 @@
-﻿using LibraryManagement.Common.Enums;
-using LibraryManagement.Data;
-using System;
+﻿using System;
+using LibraryManagement.Common.Enums;
 using LibraryManagement.Core.Services.Auth;
+using LibraryManagement.Data;
 
-namespace LibraryManagement.View.Modules
+namespace LibraryManagement.View.Modules.Auth
 {
     public class AuthModule : ModuleBase
     {
@@ -14,7 +14,7 @@ namespace LibraryManagement.View.Modules
             AuthService = new AuthService(dataSource);    
         }
 
-        private static void PrintWelcomeMessage()
+        public override void PrintMainMenu()
         {
             Console.WriteLine("Добро пожаловать в LibraryManagement\n" +
                               "Для того, чтобы использовать программу Вам необходимо авторизоваться");
@@ -28,7 +28,7 @@ namespace LibraryManagement.View.Modules
 
             while (true)
             {
-                PrintWelcomeMessage();
+                PrintMainMenu();
 
                 var choice = Console.ReadKey();
                 switch (choice.Key)
