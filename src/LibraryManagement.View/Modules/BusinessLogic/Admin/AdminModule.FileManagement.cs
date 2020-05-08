@@ -38,7 +38,7 @@ namespace LibraryManagement.View.Modules.BusinessLogic.Admin
                         Console.Clear();
                         Console.WriteLine("Создание файла");
                         Console.WriteLine("Введите название файла:");
-                        var fileName = Console.ReadLine();
+                        var fileName = ConsoleExtensions.ReadNotEmptyString();
 
                         var result = FileService.CreateFile(fileName);
 

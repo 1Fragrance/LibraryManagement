@@ -44,8 +44,7 @@ namespace LibraryManagement.View.Modules.BusinessLogic.Admin
                             Console.WriteLine($"Номер читательского билета: {user.LibraryCardNumber}");
                             if (user.LastTakenBooks != null && user.LastTakenBooks.Any())
                             {
-                                Console.WriteLine(
-                                    $"Последние взятые книги: {user.LastTakenBooks.Select(w => w.Name).Aggregate((i, j) => i + ", " + j)}");
+                                Console.WriteLine($"Последние взятые книги: {user.LastTakenBooks.Select(w => w.Name).Aggregate((i, j) => i + ", " + j)}");
                             }
 
                             Console.WriteLine();
@@ -69,8 +68,7 @@ namespace LibraryManagement.View.Modules.BusinessLogic.Admin
                             Console.WriteLine($"Номер читательского билета: {user.LibraryCardNumber}");
                             if (user.LastTakenBooks != null && user.LastTakenBooks.Any())
                             {
-                                Console.WriteLine(
-                                    $"Книги на руках: {user.LastTakenBooks?.Select(w => w.Name).Aggregate((i, j) => i + ", " + j)}");
+                                Console.WriteLine($"Книги на руках: {user.LastTakenBooks?.Select(w => w.Name).Aggregate((i, j) => i + ", " + j)}");
                             }
 
                             Console.WriteLine();
@@ -87,13 +85,12 @@ namespace LibraryManagement.View.Modules.BusinessLogic.Admin
                         Console.WriteLine("Создание новой учетной записи");
 
                         Console.WriteLine("Введите логин:");
-                        var login = Console.ReadLine();
+                        var login = ConsoleExtensions.ReadNotEmptyString(); ;
 
                         Console.WriteLine("Введите пароль:");
-                        var password = Console.ReadLine();
+                        var password = ConsoleExtensions.ReadNotEmptyString();
 
-                        Console.WriteLine(
-                            "Введите уникальный 6-значный номер читательского билета или оставьте пустым для автоматической генерации");
+                        Console.WriteLine("Введите уникальный 6-значный номер читательского билета или оставьте пустым для автоматической генерации");
                         var cardNumber = InputCardNumber();
 
                         Console.WriteLine("Тип записи: 0 - пользователь, 1 - администратор:");
@@ -138,13 +135,12 @@ namespace LibraryManagement.View.Modules.BusinessLogic.Admin
                         }
 
                         Console.WriteLine("Введите новый логин:");
-                        var login = Console.ReadLine();
+                        var login = ConsoleExtensions.ReadNotEmptyString();
 
                         Console.WriteLine("Введите новый пароль:");
-                        var password = Console.ReadLine();
+                        var password = ConsoleExtensions.ReadNotEmptyString();
 
-                        Console.WriteLine(
-                            "Введите новый уникальный 6-значный номер читательского билета или оставьте пустым для автоматической генерации");
+                        Console.WriteLine("Введите новый уникальный 6-значный номер читательского билета или оставьте пустым для автоматической генерации");
                         var cardNumber = InputCardNumber(selectedUserId);
 
                         Console.WriteLine("Новый тип записи: 0 - пользователь, 1 - администратор:");

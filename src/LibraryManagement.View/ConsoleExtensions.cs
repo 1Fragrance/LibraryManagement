@@ -28,6 +28,21 @@ namespace LibraryManagement.View
             }
         }
 
+        public static string ReadNotEmptyString()
+        {
+            while (true)
+            {
+                var str = Console.ReadLine();
+
+                if (!string.IsNullOrEmpty(str))
+                {
+                    return str;
+                }
+
+                Console.WriteLine("** Некорректный ввод! **");
+            }
+        }
+
         public static RoleType ReadRoleType()
         {
             var parsedInt = ReadInteger((int) RoleType.Client, (int) RoleType.Admin);

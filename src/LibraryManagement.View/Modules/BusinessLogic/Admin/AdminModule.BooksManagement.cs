@@ -121,7 +121,7 @@ namespace LibraryManagement.View.Modules.BusinessLogic.Admin
             var bookItem = new BookItem();
 
             Console.WriteLine("Введите название книги:");
-            bookItem.Name = Console.ReadLine();
+            bookItem.Name = ConsoleExtensions.ReadNotEmptyString();
 
             Console.WriteLine("Введите количество страниц:");
             bookItem.NumberOfPages = ConsoleExtensions.ReadInteger();
@@ -130,14 +130,13 @@ namespace LibraryManagement.View.Modules.BusinessLogic.Admin
             bookItem.PublicationYear = ConsoleExtensions.ReadYear();
 
             Console.WriteLine("Введите регистрационный номер:");
-            bookItem.RegNumber = Console.ReadLine();
+            bookItem.RegNumber = ConsoleExtensions.ReadNotEmptyString();
 
             Console.WriteLine();
             Console.WriteLine($"{Constants.OperationConstants.AddNewSubEntityOperationId}. Добавить нового автора:");
             Console.WriteLine($"{Constants.OperationConstants.SelectSubEntityOperationId}. Выбрать из существующих:");
             var authorOperationChoice = ConsoleExtensions.ReadInteger(Constants.OperationConstants.AddNewSubEntityOperationId, Constants.OperationConstants.SelectSubEntityOperationId);
 
-            
             switch (authorOperationChoice)
             {
                 case Constants.OperationConstants.SelectSubEntityOperationId:

@@ -36,9 +36,9 @@ namespace LibraryManagement.View.Modules.Auth
                         Console.Clear();
                         Console.WriteLine("Форма входа в аккаунт");
                         Console.WriteLine("Введите логин:");
-                        var login = Console.ReadLine();
+                        var login = ConsoleExtensions.ReadNotEmptyString();
                         Console.WriteLine("Введите пароль:");
-                        var password = Console.ReadLine();
+                        var password = ConsoleExtensions.ReadNotEmptyString();
 
                         var authResult = AuthService.SignIn(login, password);
 

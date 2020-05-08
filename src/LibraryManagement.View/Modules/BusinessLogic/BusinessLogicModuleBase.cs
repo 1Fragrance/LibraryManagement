@@ -81,12 +81,12 @@ namespace LibraryManagement.View.Modules.BusinessLogic
                             {
                                 case (int)BookFilteringType.ByName:
                                     {
-                                        filter.Name = Console.ReadLine();
+                                        filter.Name = ConsoleExtensions.ReadNotEmptyString();
                                         break;
                                     }
                                 case (int)BookFilteringType.ByRegNumber:
                                     {
-                                        filter.RegNumber = Console.ReadLine();
+                                        filter.RegNumber = ConsoleExtensions.ReadNotEmptyString();
                                         break;
                                     }
                                 case (int)BookFilteringType.ByNumberOfPages:
@@ -107,17 +107,17 @@ namespace LibraryManagement.View.Modules.BusinessLogic
                                     }
                                 case (int)BookFilteringType.ByPublisherName:
                                     {
-                                        filter.PublisherName = Console.ReadLine();
+                                        filter.PublisherName = ConsoleExtensions.ReadNotEmptyString();
                                         break;
                                     }
                                 case (int)BookFilteringType.ByAuthorName:
                                     {
-                                        filter.AuthorName = Console.ReadLine();
+                                        filter.AuthorName = ConsoleExtensions.ReadNotEmptyString();
                                         break;
                                     }
                                 case (int)BookFilteringType.ByLastUserName:
                                     {
-                                        filter.LastUserName = Console.ReadLine();
+                                        filter.LastUserName = ConsoleExtensions.ReadNotEmptyString();
                                         break;
                                     }
                             }

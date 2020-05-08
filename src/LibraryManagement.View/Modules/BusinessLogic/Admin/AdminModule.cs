@@ -166,13 +166,13 @@ namespace LibraryManagement.View.Modules.BusinessLogic.Admin
             var authorItem = new AuthorItem();
 
             Console.WriteLine("Введите имя автора:");
-            authorItem.Name = Console.ReadLine();
+            authorItem.Name = ConsoleExtensions.ReadNotEmptyString();
 
             Console.WriteLine("Введите фамилию автора:");
-            authorItem.Surname = Console.ReadLine();
+            authorItem.Surname = ConsoleExtensions.ReadNotEmptyString();
 
             Console.WriteLine("Введите отчество автора:");
-            authorItem.Patronymic = Console.ReadLine();
+            authorItem.Patronymic = ConsoleExtensions.ReadNotEmptyString();
 
             book.Author = authorItem;
         }
@@ -182,7 +182,7 @@ namespace LibraryManagement.View.Modules.BusinessLogic.Admin
             var publisherItem = new PublisherItem();
 
             Console.WriteLine("Введите имя издателя:");
-            publisherItem.Name = Console.ReadLine();
+            publisherItem.Name = ConsoleExtensions.ReadNotEmptyString();
 
             book.Publisher = publisherItem;
         }
