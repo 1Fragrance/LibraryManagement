@@ -1,10 +1,10 @@
-﻿using System;
-using System.Linq;
-using LibraryManagement.Common;
+﻿using LibraryManagement.Common;
 using LibraryManagement.Common.Items;
 using LibraryManagement.Core.Services.BusinessLogic;
 using LibraryManagement.Core.Services.Serialization;
 using LibraryManagement.Data;
+using System;
+using System.Linq;
 using Console = System.Console;
 
 namespace LibraryManagement.View.Modules.BusinessLogic.Admin
@@ -152,8 +152,10 @@ namespace LibraryManagement.View.Modules.BusinessLogic.Admin
             }
         }
 
-        private static void InputAuthorFields(AuthorItem authorItem)
+        private static void InputAuthorFields(BookItem book)
         {
+            var authorItem = new AuthorItem();
+
             Console.WriteLine("Введите имя автора:");
             authorItem.Name = Console.ReadLine();
 
@@ -162,12 +164,18 @@ namespace LibraryManagement.View.Modules.BusinessLogic.Admin
 
             Console.WriteLine("Введите отчество автора:");
             authorItem.Patronymic = Console.ReadLine();
+
+            book.Author = authorItem;
         }
 
-        private static void InputPublisherFields(PublisherItem publisherItem)
+        private static void InputPublisherFields(BookItem book)
         {
+            var publisherItem = new PublisherItem();
+
             Console.WriteLine("Введите имя издателя:");
             publisherItem.Name = Console.ReadLine();
+
+            book.Publisher = publisherItem;
         }
     }
 }

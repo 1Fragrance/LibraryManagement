@@ -112,27 +112,23 @@ namespace LibraryManagement.View.Modules.BusinessLogic.Admin
             Console.WriteLine();
             Console.WriteLine($"{Constants.OperationConstants.AddNewSubEntityOperationId}. Добавить нового автора:");
             Console.WriteLine($"{Constants.OperationConstants.SelectSubEntityOperationId}. Выбрать из существующих:");
-            var authorOperationChoice = ConsoleExtensions.ReadInteger(
-                Constants.OperationConstants.AddNewSubEntityOperationId,
-                Constants.OperationConstants.SelectSubEntityOperationId);
+            var authorOperationChoice = ConsoleExtensions.ReadInteger(Constants.OperationConstants.AddNewSubEntityOperationId, Constants.OperationConstants.SelectSubEntityOperationId);
 
-            var authorItem = new AuthorItem();
+            
             switch (authorOperationChoice)
             {
                 case Constants.OperationConstants.SelectSubEntityOperationId:
                 {
                     Console.WriteLine("Существующие авторы:");
-                    Console.WriteLine(
-                        $"Нажмите \"{Constants.OperationConstants.ReturnOperationId}\" для добавления нового автора");
+                    Console.WriteLine($"Нажмите \"{Constants.OperationConstants.ReturnOperationId}\" для добавления нового автора");
                     var selectedAuthorId = SelectAuthorFromList();
 
                     if (selectedAuthorId == Constants.OperationConstants.ReturnOperationId)
                     {
-                        InputAuthorFields(authorItem);
+                        InputAuthorFields(bookItem);
                     }
                     else
                     {
-                        authorItem.Id = selectedAuthorId;
                         bookItem.AuthorId = selectedAuthorId;
                     }
 
@@ -140,50 +136,41 @@ namespace LibraryManagement.View.Modules.BusinessLogic.Admin
                 }
                 case Constants.OperationConstants.AddNewSubEntityOperationId:
                 {
-                    InputAuthorFields(authorItem);
+                    InputAuthorFields(bookItem);
                     break;
                 }
             }
 
-            bookItem.Author = authorItem;
-
             Console.WriteLine();
             Console.WriteLine($"{Constants.OperationConstants.AddNewSubEntityOperationId}. Добавить нового издателя:");
             Console.WriteLine($"{Constants.OperationConstants.SelectSubEntityOperationId}. Выбрать из существующих:");
-            var publisherOperationChoice = ConsoleExtensions.ReadInteger(
-                Constants.OperationConstants.AddNewSubEntityOperationId,
-                Constants.OperationConstants.SelectSubEntityOperationId);
+            var publisherOperationChoice = ConsoleExtensions.ReadInteger(Constants.OperationConstants.AddNewSubEntityOperationId, Constants.OperationConstants.SelectSubEntityOperationId);
 
-            var publisherItem = new PublisherItem();
             switch (publisherOperationChoice)
             {
                 case Constants.OperationConstants.SelectSubEntityOperationId:
                 {
                     Console.WriteLine("Существующие издатели:");
-                    Console.WriteLine(
-                        $"Нажмите \"{Constants.OperationConstants.ReturnOperationId}\" для добавления нового издателя");
+                    Console.WriteLine($"Нажмите \"{Constants.OperationConstants.ReturnOperationId}\" для добавления нового издателя");
                     var selectedPublisherId = SelectPublisherFromList();
 
                     if (selectedPublisherId == Constants.OperationConstants.ReturnOperationId)
                     {
-                        InputPublisherFields(publisherItem);
+                        InputPublisherFields(bookItem);
                     }
                     else
                     {
                         bookItem.PublisherId = selectedPublisherId;
-                        publisherItem.Id = selectedPublisherId;
                     }
 
                     break;
                 }
                 case Constants.OperationConstants.AddNewSubEntityOperationId:
                 {
-                    InputPublisherFields(publisherItem);
+                    InputPublisherFields(bookItem);
                     break;
                 }
             }
-
-            bookItem.Publisher = publisherItem;
 
             bookItem.IsBookInLibrary = false;
 
