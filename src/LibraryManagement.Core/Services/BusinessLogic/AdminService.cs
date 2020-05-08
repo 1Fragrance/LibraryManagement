@@ -1,11 +1,11 @@
 ﻿using LibraryManagement.Common;
 using LibraryManagement.Common.Items;
+using LibraryManagement.Common.Results;
 using LibraryManagement.Data;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using LibraryManagement.Common.Results;
+using LibraryManagement.Common.Filters;
 
 namespace LibraryManagement.Core.Services.BusinessLogic
 {
@@ -13,6 +13,25 @@ namespace LibraryManagement.Core.Services.BusinessLogic
     {
         public AdminService(DbDataSource context) : base(context)
         {
+        }
+
+        public void AssignBookToUser(int userId, int bookId)
+        {
+            var book = Context.Books.GetEntity(bookId);
+
+            book.IsBookInLibrary = false;
+            book.LastUserId = userId;
+
+            Context.Books.Save(book);
+        }
+
+        public void ReturnBookToLibrary(int selectedBookId)
+        {
+            var book = Context.Books.GetEntity(selectedBookId);
+
+            book.IsBookInLibrary = true;
+
+            Context.Books.Save(book);
         }
 
         public ExecutionResult UpdateBook(BookItem bookItem)
@@ -61,6 +80,13 @@ namespace LibraryManagement.Core.Services.BusinessLogic
         public IList<BookItem> GetBooks()
         {
             var books = Context.Books.GetList();
+            var bookItemList = books.Select(w => Mapper.BookMapper.MapToItem(w)).ToList();
+            return bookItemList;
+        }
+
+        public IList<BookItem> GetBooks(bool isBookInLibrary)
+        {
+            var books = Context.Books.GetFilteredBooks(new BookFilter {IsBookInLibrary = isBookInLibrary});
             var bookItemList = books.Select(w => Mapper.BookMapper.MapToItem(w)).ToList();
             return bookItemList;
         }

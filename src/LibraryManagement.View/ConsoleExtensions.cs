@@ -1,19 +1,20 @@
 ﻿using LibraryManagement.Common.Enums;
 using System;
+using System.Collections.Generic;
 using LibraryManagement.Common;
 
 namespace LibraryManagement.View
 {
     public static class ConsoleExtensions
     {
-        public static int ReadInteger(int? lowerBound = null, int? upperBound = null, int? exceptedValue = null)
+        public static int ReadInteger(IList<int> allowedValues = null, int? exceptedValue = null, int? maxValue = null, int? minValue = null)
         {
             while (true)
             {
                 var inputStr = Console.ReadLine();
 
                 var parseResult = int.TryParse(inputStr, out var parsedInt);
-                if (!parseResult || (lowerBound != null && parsedInt < lowerBound) || (upperBound != null && parsedInt > upperBound))
+                if (!parseResult || allowedValues != null && allowedValues.Contains(parsedInt) || maxValue != null && parsedInt <= maxValue || minValue != null && parsedInt >= minValue)
                 {
                     if (exceptedValue != null && exceptedValue == parsedInt)
                     {
@@ -45,7 +46,7 @@ namespace LibraryManagement.View
 
         public static RoleType ReadRoleType()
         {
-            var parsedInt = ReadInteger((int) RoleType.Client, (int) RoleType.Admin);
+            var parsedInt = ReadInteger(allowedValues :new List<int> { (int)RoleType.Client, (int)RoleType.Admin });
                 
             return (RoleType) parsedInt;
         }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using LibraryManagement.Common;
 using LibraryManagement.Common.Items;
 
@@ -135,7 +136,7 @@ namespace LibraryManagement.View.Modules.BusinessLogic.Admin
             Console.WriteLine();
             Console.WriteLine($"{Constants.OperationConstants.AddNewSubEntityOperationId}. Добавить нового автора:");
             Console.WriteLine($"{Constants.OperationConstants.SelectSubEntityOperationId}. Выбрать из существующих:");
-            var authorOperationChoice = ConsoleExtensions.ReadInteger(Constants.OperationConstants.AddNewSubEntityOperationId, Constants.OperationConstants.SelectSubEntityOperationId);
+            var authorOperationChoice = ConsoleExtensions.ReadInteger(new List<int> {Constants.OperationConstants.AddNewSubEntityOperationId, Constants.OperationConstants.SelectSubEntityOperationId});
 
             switch (authorOperationChoice)
             {
@@ -166,7 +167,7 @@ namespace LibraryManagement.View.Modules.BusinessLogic.Admin
             Console.WriteLine();
             Console.WriteLine($"{Constants.OperationConstants.AddNewSubEntityOperationId}. Добавить нового издателя:");
             Console.WriteLine($"{Constants.OperationConstants.SelectSubEntityOperationId}. Выбрать из существующих:");
-            var publisherOperationChoice = ConsoleExtensions.ReadInteger(Constants.OperationConstants.AddNewSubEntityOperationId, Constants.OperationConstants.SelectSubEntityOperationId);
+            var publisherOperationChoice = ConsoleExtensions.ReadInteger(new List<int> {Constants.OperationConstants.AddNewSubEntityOperationId, Constants.OperationConstants.SelectSubEntityOperationId});
 
             switch (publisherOperationChoice)
             {

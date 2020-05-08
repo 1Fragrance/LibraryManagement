@@ -65,7 +65,7 @@ namespace LibraryManagement.Data.Repositories
             return query.ToList();
         }
 
-        public IQueryable<BookEntity> GetFiltered(IQueryable<BookEntity> query, BookFilter filter)
+        private IQueryable<BookEntity> GetFiltered(IQueryable<BookEntity> query, BookFilter filter)
         {
             if (!string.IsNullOrEmpty(filter.Name))
             {

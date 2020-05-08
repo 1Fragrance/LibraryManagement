@@ -23,9 +23,10 @@ namespace LibraryManagement.View.Modules.BusinessLogic.Admin
             Console.WriteLine("1. Управление учетными записями пользователей");
             Console.WriteLine("2. Управление книгами");
             Console.WriteLine("3. Просмотр книг");
-            Console.WriteLine("4. Работа с файлами данных");
-            Console.WriteLine("5. Вернутся на окно входа в учетную запись");
-            Console.WriteLine("6. Выход из программы");
+            Console.WriteLine("4. Выдача книг пользователям");
+            Console.WriteLine("5. Работа с файлами данных");
+            Console.WriteLine("6. Вернутся на окно входа в учетную запись");
+            Console.WriteLine("7. Выход из программы");
         }
 
         public void WorkAsAdmin()
@@ -57,16 +58,21 @@ namespace LibraryManagement.View.Modules.BusinessLogic.Admin
                     }
                     case ConsoleKey.D4:
                     {
-                        FileManagement();
+                        BookAssigning();
                         break;
                     }
                     case ConsoleKey.D5:
+                    {
+                        FileManagement();
+                        break;
+                    }
+                    case ConsoleKey.D6:
                     {
                         exitToken = false;
                         Console.Clear();
                         break;
                     }
-                    case ConsoleKey.D6:
+                    case ConsoleKey.D7:
                     {
                         Environment.Exit(0);
                         break;
@@ -85,56 +91,80 @@ namespace LibraryManagement.View.Modules.BusinessLogic.Admin
         {
             var users = BusinessService.GetUsers(exceptedId);
 
-            foreach (var user in users)
+            for (var i = 0; i < users.Count; i++)
             {
-                Console.WriteLine($"{user.Id}. {user.Login}");
+                var user = users[i];
+                Console.WriteLine($"{i + 1}. {user.Login}");
             }
 
-            var selectedUserId = ConsoleExtensions.ReadInteger(Constants.OperationConstants.ReturnOperationId, users.Max(x => x.Id));
+            var selectedUserId = ConsoleExtensions.ReadInteger(minValue: Constants.OperationConstants.ReturnOperationId, maxValue: users.Max(x => x.Id));
 
-            return selectedUserId;
+            if (selectedUserId == Constants.OperationConstants.ReturnOperationId)
+            {
+                return selectedUserId;
+            }
+
+            return users[selectedUserId - 1].Id.GetValueOrDefault();
         }
 
         private int SelectAuthorFromList()
         {
             var authors = BusinessService.GetAuthors();
 
-            foreach (var author in authors)
+            for (var i = 0; i < authors.Count; i++)
             {
-                Console.WriteLine($"{author.Id}. {author.DisplayName}");
+                var author = authors[i];
+                Console.WriteLine($"{i + 1}. {author.DisplayName}");
             }
 
-            var selectedAuthorId = ConsoleExtensions.ReadInteger(Constants.OperationConstants.ReturnOperationId, authors.Max(x => x.Id), Constants.OperationConstants.ReturnOperationId);
+            var selectedAuthorId = ConsoleExtensions.ReadInteger(minValue: Constants.OperationConstants.ReturnOperationId, maxValue: authors.Max(x => x.Id));
 
-            return selectedAuthorId;
+            if (selectedAuthorId == Constants.OperationConstants.ReturnOperationId)
+            {
+                return selectedAuthorId;
+            }
+
+            return authors[selectedAuthorId - 1].Id.GetValueOrDefault();
         }
 
         private int SelectPublisherFromList()
         {
             var publishers = BusinessService.GetPublishers();
 
-            foreach (var publisher in publishers)
+            for (var i = 0; i < publishers.Count; i++)
             {
-                Console.WriteLine($"{publisher.Id}. {publisher.Name}");
+                var publisher = publishers[i];
+                Console.WriteLine($"{i + 1}. {publisher.Name}");
             }
 
-            var selectedPublisherId = ConsoleExtensions.ReadInteger(Constants.OperationConstants.ReturnOperationId, publishers.Max(x => x.Id), Constants.OperationConstants.ReturnOperationId);
+            var selectedPublisherId = ConsoleExtensions.ReadInteger(minValue: Constants.OperationConstants.ReturnOperationId, maxValue: publishers.Max(x => x.Id));
 
-            return selectedPublisherId;
+            if (selectedPublisherId == Constants.OperationConstants.ReturnOperationId)
+            {
+                return selectedPublisherId;
+            }
+
+            return publishers[selectedPublisherId - 1].Id.GetValueOrDefault();
         }
 
-        private int SelectBookFromList()
+        private int SelectBookFromList(bool? isBookInLibrary = null)
         {
-            var books = BusinessService.GetBooks();
+            var books = isBookInLibrary != null ? BusinessService.GetBooks(isBookInLibrary.Value) : BusinessService.GetBooks();
 
-            foreach (var book in books)
+            for (var i = 0; i < books.Count; i++)
             {
-                Console.WriteLine($"{book.Id}. {book.Name}");
+                var book = books[i];
+                Console.WriteLine($"{i + 1}. {book.Name}");
             }
 
-            var selectedBookId = ConsoleExtensions.ReadInteger(Constants.OperationConstants.ReturnOperationId, books.Max(x => x.Id));
+            var selectedBookId = ConsoleExtensions.ReadInteger(minValue: Constants.OperationConstants.ReturnOperationId, maxValue: books.Max(x => x.Id));
 
-            return selectedBookId;
+            if (selectedBookId == Constants.OperationConstants.ReturnOperationId)
+            {
+                return selectedBookId;
+            }
+
+            return books[selectedBookId - 1].Id.GetValueOrDefault();
         }
 
 

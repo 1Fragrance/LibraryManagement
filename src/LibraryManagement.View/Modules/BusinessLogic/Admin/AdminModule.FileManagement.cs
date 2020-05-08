@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using LibraryManagement.Common;
 using LibraryManagement.Core.Services.Serialization;
@@ -101,17 +102,17 @@ namespace LibraryManagement.View.Modules.BusinessLogic.Admin
                         {
                             foreach (var (fileId, fileName) in fileInfos)
                             {
-                                Console.WriteLine($"{fileId + 1}. {Path.GetFileName(fileName)}");
+                                Console.WriteLine($"{fileId}. {Path.GetFileName(fileName)}");
                             }
 
-                            var fileSelection = ConsoleExtensions.ReadInteger(Constants.OperationConstants.ReturnOperationId, fileInfos.Count);
+                            var fileSelection = ConsoleExtensions.ReadInteger(new List<int> {Constants.OperationConstants.ReturnOperationId, fileInfos.Count - 1});
 
                             if (fileSelection == Constants.OperationConstants.ReturnOperationId)
                             {
                                 break;
                             }
 
-                            var result = FileService.ReadFile(fileInfos[fileSelection - 1]);
+                            var result = FileService.ReadFile(fileInfos[fileSelection]);
 
                             if (!result.IsSuccess)
                             {
@@ -147,19 +148,17 @@ namespace LibraryManagement.View.Modules.BusinessLogic.Admin
                         {
                             foreach (var (fileId, fileName) in fileInfos)
                             {
-                                Console.WriteLine($"{fileId + 1}. {Path.GetFileName(fileName)}");
+                                Console.WriteLine($"{fileId}. {Path.GetFileName(fileName)}");
                             }
 
-                            var fileSelection =
-                                ConsoleExtensions.ReadInteger(Constants.OperationConstants.ReturnOperationId,
-                                    fileInfos.Count);
+                            var fileSelection = ConsoleExtensions.ReadInteger(new List<int> {Constants.OperationConstants.ReturnOperationId, fileInfos.Count - 1});
 
                             if (fileSelection == Constants.OperationConstants.ReturnOperationId)
                             {
                                 break;
                             }
 
-                            var result = FileService.DeleteFile(fileInfos[fileSelection - 1]);
+                            var result = FileService.DeleteFile(fileInfos[fileSelection]);
 
                             if (!result.IsSuccess)
                             {

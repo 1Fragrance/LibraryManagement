@@ -21,7 +21,7 @@ namespace LibraryManagement.Core.Services.Serialization
             return Directory.GetFiles(Directory.GetCurrentDirectory())
                 .Where(w => w.EndsWith(Constants.Serialization.FileExtension))
                 .Select((value, index) => new {index, value})
-                .ToDictionary(w => w.index, w => w.value);
+                .ToDictionary(w => w.index + 1, w => w.value);
         }
 
         public ExecutionResult DeleteFile(string filePath)
@@ -145,7 +145,7 @@ namespace LibraryManagement.Core.Services.Serialization
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return FileParseBadResult($"Формат файла нарушен. Ошибка на строке: {index + 1}");
             }       

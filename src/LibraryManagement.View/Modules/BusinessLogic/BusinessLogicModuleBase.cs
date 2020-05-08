@@ -4,6 +4,8 @@ using LibraryManagement.Common.Filters;
 using LibraryManagement.Common.Items;
 using LibraryManagement.Core.Services.BusinessLogic;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace LibraryManagement.View.Modules.BusinessLogic
 {
@@ -55,7 +57,7 @@ namespace LibraryManagement.View.Modules.BusinessLogic
                     case ConsoleKey.D1:
                         {
                             Console.Clear();
-
+                            Console.WriteLine("Вывод списка книг");
                             var books = BusinessService.GetBooksWithEverything();
                             foreach (var book in books)
                             {
@@ -72,7 +74,7 @@ namespace LibraryManagement.View.Modules.BusinessLogic
                             Console.WriteLine("Вывод списка книг в отфильтрованном по определенному полю виде");
                             PrintBookFieldSelection();
 
-                            var selectedFilteringType = ConsoleExtensions.ReadInteger((int)BookFilteringType.ByName, (int)BookFilteringType.ByLastUserName);
+                            var selectedFilteringType = ConsoleExtensions.ReadInteger(Enum.GetValues(typeof(BookFilteringType)).Cast<BookFilteringType>().Cast<int>().ToList());
                             Console.Clear();
                             Console.WriteLine("Введите значение для фильтрации");
 
@@ -140,7 +142,7 @@ namespace LibraryManagement.View.Modules.BusinessLogic
                             Console.WriteLine("Вывод списка книг в отсортированном виде");
                             PrintBookFieldSelection();
 
-                            var selectedOrderingType = ConsoleExtensions.ReadInteger((int)BookFilteringType.ByName, (int)BookFilteringType.ByLastUserName);
+                            var selectedOrderingType = ConsoleExtensions.ReadInteger(Enum.GetValues(typeof(BookFilteringType)).Cast<BookFilteringType>().Cast<int>().ToList());
                             Console.Clear();
                             Console.WriteLine("Вывести по возрастанию? (Да, Нет)");
                             var isAsc = ConsoleExtensions.ReadBoolean();
