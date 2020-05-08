@@ -16,7 +16,7 @@ namespace LibraryManagement.Data
         public DatabaseContext()
         {
             #if DEBUG
-                 Database.EnsureDeleted();
+                 //Database.EnsureDeleted();
             #endif
 
             Database.EnsureCreated();

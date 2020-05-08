@@ -47,12 +47,12 @@ namespace LibraryManagement.Data.Repositories
         {
             var tableName = DbContext.Model.FindEntityType(typeof(TEntity)).GetTableName();
 
-            DbContext.Database.ExecuteSqlRaw($"SET IDENTITY_INSERT {tableName} ON");
+            DbContext.Database.ExecuteSqlRaw($"SET IDENTITY_INSERT [dbo].[{tableName}] ON");
 
             DbContext.Entry(entity).State = EntityState.Added;
             DbContext.SaveChanges();
 
-            DbContext.Database.ExecuteSqlRaw($"SET IDENTITY_INSERT {tableName} OFF");
+            DbContext.Database.ExecuteSqlRaw($"SET IDENTITY_INSERT [dbo].[{tableName}] OFF");
         }
 
         public void Delete(int id)

@@ -17,10 +17,10 @@ namespace LibraryManagement.Common
             public const int YearMinValue = 1900;
             public const int NewEntityId = 0;
 
-            public const int AuthorTableColumnsCount = 4;
-            public const int BookTableColumnsCount = 9;
-            public const int PublisherTableColumnsCount = 2;
-            public const int UserTableColumnsCount = 5;
+            public const int AuthorTableColumnsCount = 5;
+            public const int BookTableColumnsCount = 10;
+            public const int PublisherTableColumnsCount = 3;
+            public const int UserTableColumnsCount = 6;
         }
 
         public static class LoggingConstants

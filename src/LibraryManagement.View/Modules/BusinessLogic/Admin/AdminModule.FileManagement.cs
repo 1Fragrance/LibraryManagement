@@ -47,12 +47,12 @@ namespace LibraryManagement.View.Modules.BusinessLogic.Admin
                         {
                             foreach (var error in result.Errors)
                             {
-                                Console.WriteLine(error);
+                                Console.WriteLine(error.Message);
                             }
                         }
                         else
                         {
-                            Console.WriteLine("Файл данных \"{fileName}\" успешно создан");
+                            Console.WriteLine($"Файл данных \"{fileName}\" успешно создан");
                         }
 
                         PrintPressAnyBottom();
@@ -104,9 +104,7 @@ namespace LibraryManagement.View.Modules.BusinessLogic.Admin
                                 Console.WriteLine($"{fileId + 1}. {Path.GetFileName(fileName)}");
                             }
 
-                            var fileSelection =
-                                ConsoleExtensions.ReadInteger(Constants.OperationConstants.ReturnOperationId,
-                                    fileInfos.Count);
+                            var fileSelection = ConsoleExtensions.ReadInteger(Constants.OperationConstants.ReturnOperationId, fileInfos.Count);
 
                             if (fileSelection == Constants.OperationConstants.ReturnOperationId)
                             {
@@ -119,7 +117,7 @@ namespace LibraryManagement.View.Modules.BusinessLogic.Admin
                             {
                                 foreach (var error in result.Errors)
                                 {
-                                    Console.WriteLine(error);
+                                    Console.WriteLine(error.Message);
                                 }
                             }
                             else
@@ -167,7 +165,7 @@ namespace LibraryManagement.View.Modules.BusinessLogic.Admin
                             {
                                 foreach (var error in result.Errors)
                                 {
-                                    Console.WriteLine(error);
+                                    Console.WriteLine(error.Message);
                                 }
                             }
                             else

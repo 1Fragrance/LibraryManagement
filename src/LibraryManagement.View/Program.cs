@@ -16,34 +16,33 @@ namespace LibraryManagement.View
         {
             Directory.SetCurrentDirectory(Path.GetDirectoryName(typeof(Program).Assembly.Location));
 
-            //try
-            //{
+            try
+            {
                 using (var context = new DatabaseContext())
                 {
                     using (var dataSource = new DbDataSource(context))
                     {
-                        var service = new FileService(dataSource);
-
-                        service.CreateFile("abc.txt");
-
                         RunProgram(dataSource);
                     }
                 }
-            //}
-            //catch (Exception ex)
-            //{
+            }
+            catch (Exception ex)
+            {
                 #if DEBUG
-                    //Console.WriteLine(ex.Message);
+                    Console.WriteLine(ex.Message);
                 #endif
-                //LogToFile(ex.Message);
-            //}
+                LogToFile(ex.Message);
+                LogToFile(ex.StackTrace);
+            }
         }
 
         private static void LogToFile(string str)
         {
+            var logStr = $"{DateTime.UtcNow}: Error: ";
+
             using (var sw = new StreamWriter(Constants.LoggingConstants.FileName, true))
             {
-                sw.WriteLine(str);
+                sw.WriteLine(logStr + str);
             }
         }
 

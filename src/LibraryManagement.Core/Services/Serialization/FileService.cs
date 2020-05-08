@@ -108,7 +108,7 @@ namespace LibraryManagement.Core.Services.Serialization
                                 Id = Convert.ToInt32(recordFields[1]),
                                 Login = recordFields[2],
                                 Password = recordFields[3],
-                                Role = (RoleType) Convert.ToInt32(recordFields[4]),
+                                Role = EnumExtensions.GetValueFromDescription<RoleType>(recordFields[4]),
                                 LibraryCardNumber = recordFields[5]
                             };
 
@@ -127,12 +127,12 @@ namespace LibraryManagement.Core.Services.Serialization
                                 Id = Convert.ToInt32(recordFields[1]),
                                 RegNumber = recordFields[2],
                                 Name = recordFields[3],
-                                NumberOfPages = Convert.ToInt32(recordFields[4]),
-                                PublicationYear = Convert.ToInt32(recordFields[5]),
-                                IsBookInLibrary = Convert.ToBoolean(recordFields[6]),
-                                PublisherId = Convert.ToInt32(recordFields[7]),
-                                AuthorId = Convert.ToInt32(recordFields[8]),
-                                LastUserId = Convert.ToInt32(recordFields[9])
+                                NumberOfPages = string.IsNullOrEmpty(recordFields[4]) ? default : Convert.ToInt32(recordFields[4]),
+                                PublicationYear = string.IsNullOrEmpty(recordFields[5]) ? default : Convert.ToInt32(recordFields[5]),
+                                IsBookInLibrary = string.IsNullOrEmpty(recordFields[6]) ? default : Convert.ToBoolean(recordFields[6]),
+                                PublisherId = string.IsNullOrEmpty(recordFields[7]) ? (int?)null : Convert.ToInt32(recordFields[7]),
+                                AuthorId = string.IsNullOrEmpty(recordFields[8]) ? (int?)null :  Convert.ToInt32(recordFields[8]),
+                                LastUserId = string.IsNullOrEmpty(recordFields[9])? (int?) null : Convert.ToInt32(recordFields[9])
                             };
 
                             Context.Books.SaveEntityWithId(bookEntity);
@@ -144,11 +144,11 @@ namespace LibraryManagement.Core.Services.Serialization
                         }
                     }
                 }
-            }
-            catch (Exception)
+        }
+            catch (Exception ex)
             {
                 return FileParseBadResult($"Формат файла нарушен. Ошибка на строке: {index + 1}");
-            }
+            }       
 
             Context.CommitTransaction();
             return SuccessResult();
