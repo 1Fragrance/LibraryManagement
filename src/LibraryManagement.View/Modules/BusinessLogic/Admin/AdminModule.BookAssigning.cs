@@ -36,7 +36,7 @@ namespace LibraryManagement.View.Modules.BusinessLogic.Admin
                         Console.WriteLine("Выберите книгу");
                         var selectedBookId = SelectBookFromList(true);
 
-                        BusinessService.AssignBookToUser(selectedBookId, selectedUserId);
+                        BusinessService.AssignBookToUser(selectedUserId, selectedBookId);
 
                         PrintPressAnyBottom();
                         break;

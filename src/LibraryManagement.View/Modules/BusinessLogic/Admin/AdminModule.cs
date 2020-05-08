@@ -97,7 +97,7 @@ namespace LibraryManagement.View.Modules.BusinessLogic.Admin
                 Console.WriteLine($"{i + 1}. {user.Login}");
             }
 
-            var selectedUserId = ConsoleExtensions.ReadInteger(minValue: Constants.OperationConstants.ReturnOperationId, maxValue: users.Max(x => x.Id));
+            var selectedUserId = ConsoleExtensions.ReadInteger(minValue: Constants.OperationConstants.ReturnOperationId, maxValue: users.Count - 1);
 
             if (selectedUserId == Constants.OperationConstants.ReturnOperationId)
             {
@@ -117,7 +117,7 @@ namespace LibraryManagement.View.Modules.BusinessLogic.Admin
                 Console.WriteLine($"{i + 1}. {author.DisplayName}");
             }
 
-            var selectedAuthorId = ConsoleExtensions.ReadInteger(minValue: Constants.OperationConstants.ReturnOperationId, maxValue: authors.Max(x => x.Id));
+            var selectedAuthorId = ConsoleExtensions.ReadInteger(minValue: Constants.OperationConstants.ReturnOperationId, maxValue: authors.Count - 1);
 
             if (selectedAuthorId == Constants.OperationConstants.ReturnOperationId)
             {
@@ -137,7 +137,7 @@ namespace LibraryManagement.View.Modules.BusinessLogic.Admin
                 Console.WriteLine($"{i + 1}. {publisher.Name}");
             }
 
-            var selectedPublisherId = ConsoleExtensions.ReadInteger(minValue: Constants.OperationConstants.ReturnOperationId, maxValue: publishers.Max(x => x.Id));
+            var selectedPublisherId = ConsoleExtensions.ReadInteger(minValue: Constants.OperationConstants.ReturnOperationId, maxValue: publishers.Count - 1);
 
             if (selectedPublisherId == Constants.OperationConstants.ReturnOperationId)
             {
@@ -157,7 +157,7 @@ namespace LibraryManagement.View.Modules.BusinessLogic.Admin
                 Console.WriteLine($"{i + 1}. {book.Name}");
             }
 
-            var selectedBookId = ConsoleExtensions.ReadInteger(minValue: Constants.OperationConstants.ReturnOperationId, maxValue: books.Max(x => x.Id));
+            var selectedBookId = ConsoleExtensions.ReadInteger(minValue: Constants.OperationConstants.ReturnOperationId, maxValue: books.Count - 1);
 
             if (selectedBookId == Constants.OperationConstants.ReturnOperationId)
             {

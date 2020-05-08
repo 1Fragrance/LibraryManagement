@@ -7,20 +7,15 @@ namespace LibraryManagement.View
 {
     public static class ConsoleExtensions
     {
-        public static int ReadInteger(IList<int> allowedValues = null, int? exceptedValue = null, int? maxValue = null, int? minValue = null)
+        public static int ReadInteger(IList<int> allowedValues = null, int? maxValue = null, int? minValue = null)
         {
             while (true)
             {
                 var inputStr = Console.ReadLine();
 
                 var parseResult = int.TryParse(inputStr, out var parsedInt);
-                if (!parseResult || allowedValues != null && allowedValues.Contains(parsedInt) || maxValue != null && parsedInt <= maxValue || minValue != null && parsedInt >= minValue)
+                if (!parseResult || allowedValues != null && !allowedValues.Contains(parsedInt) || maxValue != null && parsedInt > maxValue || minValue != null && parsedInt < minValue)
                 {
-                    if (exceptedValue != null && exceptedValue == parsedInt)
-                    {
-                        return parsedInt;
-                    }
-
                     Console.WriteLine("** Некорректный ввод! **");
                     continue;
                 }
