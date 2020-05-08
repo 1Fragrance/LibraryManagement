@@ -15,17 +15,28 @@ namespace LibraryManagement.Core.Services.BusinessLogic
         {
         }
 
-        public void UpdateBook(BookItem bookItem)
+        public ExecutionResult UpdateBook(BookItem bookItem)
         {
+            if (Context.Books.IsBookRegNumberExist(bookItem.RegNumber, bookItem.Id))
+            {
+                return BadResult("Такой регистрационный номер уже есть в системе");
+            }
+
             var book = Context.Books.GetEntity(bookItem.Id.GetValueOrDefault());
 
             Mapper.BookMapper.MapToEntity(bookItem, book);
 
             Context.Books.Save(book);
+            return SuccessResult();
         }
 
-        public void CreateBook(BookItem bookItem)
+        public ExecutionResult CreateBook(BookItem bookItem)
         {
+            if (Context.Books.IsBookRegNumberExist(bookItem.RegNumber))
+            {
+                return BadResult("Такой регистрационный номер уже есть в системе");
+            }
+
             var book = Mapper.BookMapper.MapToEntity(bookItem);
 
             if (book.PublisherId == Constants.DataAnnotationConstants.NewEntityId)
@@ -39,6 +50,7 @@ namespace LibraryManagement.Core.Services.BusinessLogic
             }
 
             Context.Books.Save(book);
+            return SuccessResult();
         }
 
         public void DeleteBook(int id)

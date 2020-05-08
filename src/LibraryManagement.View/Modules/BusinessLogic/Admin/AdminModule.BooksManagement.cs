@@ -35,7 +35,19 @@ namespace LibraryManagement.View.Modules.BusinessLogic.Admin
 
                         var bookItem = CreateOrUpdateBook();
 
-                        BusinessService.CreateBook(bookItem);
+                        var result = BusinessService.CreateBook(bookItem);
+
+                        Console.Clear();
+                        if (!result.IsSuccess)
+                        {
+                            foreach (var error in result.Errors)
+                            {
+                                Console.WriteLine(error.Message);
+                            }
+
+                            Console.WriteLine();
+                        }
+
                         break;
                     }
 
@@ -56,7 +68,18 @@ namespace LibraryManagement.View.Modules.BusinessLogic.Admin
                         var bookItem = CreateOrUpdateBook();
                         bookItem.Id = selectedBookId;
 
-                        BusinessService.UpdateBook(bookItem);
+                        var result = BusinessService.UpdateBook(bookItem);
+
+                        Console.Clear();
+                        if (!result.IsSuccess)
+                        {
+                            foreach (var error in result.Errors)
+                            {
+                                Console.WriteLine(error.Message);
+                            }
+
+                            Console.WriteLine();
+                        }
 
                         break;
                     }

@@ -14,6 +14,18 @@ namespace LibraryManagement.Data.Repositories
         {
         }
 
+        public bool IsBookRegNumberExist(string regNumber, int? exceptedEntityId = null)
+        {
+            var query = DbSet.AsQueryable();
+
+            if (exceptedEntityId != null)
+            {
+                query = query.Where(r => exceptedEntityId != r.Id);
+            }
+
+            return query.Any(w => w.RegNumber == regNumber);
+        }
+
         public IList<BookEntity> GetBooksIncludeAll()
         {
             return DbSet
