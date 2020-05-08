@@ -13,6 +13,7 @@ namespace LibraryManagement.Core.Mappers
                 sourceEntity = new UserEntity();
             }
 
+            sourceEntity.Id = item.Id.GetValueOrDefault();
             sourceEntity.Login = item.Login;
             sourceEntity.Password = item.Password;
             sourceEntity.Role = item.Role;

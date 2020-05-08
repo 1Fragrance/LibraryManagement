@@ -5,6 +5,8 @@ using LibraryManagement.Core.Services.BusinessLogic;
 using LibraryManagement.Core.Services.Serialization;
 using LibraryManagement.Data;
 using System;
+using System.Data;
+using System.IO;
 using System.Linq;
 using Console = System.Console;
 
@@ -14,7 +16,7 @@ namespace LibraryManagement.View.Modules.BusinessLogic
     {
         private FileService FileService { get; }
 
-        public AdminModule(DbDataSource dataSource)
+        public AdminModule(int currentUserId, DbDataSource dataSource) : base(currentUserId)
         {
             BusinessService = new AdminService(dataSource);
             FileService = new FileService(dataSource);
@@ -24,22 +26,21 @@ namespace LibraryManagement.View.Modules.BusinessLogic
         {
             Console.WriteLine("Система администрирования библиотекой");
             Console.WriteLine("1. Управление учетными записями пользователей");
-            Console.WriteLine("2. Управление базой данных");
-            Console.WriteLine("3. Просмотр базы данных");
-            Console.WriteLine("4. Работа с файлом данных");
+            Console.WriteLine("2. Управление книгами");
+            Console.WriteLine("3. Просмотр книг");
+            Console.WriteLine("4. Работа с файлами данных");
             Console.WriteLine("5. Выход из программы");
-            Console.WriteLine();
         }
 
         public void PrintUserManagementMenu()
         {
             Console.WriteLine("Управление учетными записями пользователей");
-            Console.WriteLine("1. Просмотр всех зарегистрированных учетных записей");
-            Console.WriteLine("2. Добавление новой учетной записи");
-            Console.WriteLine("3. Редактирование учетной записи");
-            Console.WriteLine("4. Удаление учетной записи");
-            Console.WriteLine("5. Назад");
-            Console.WriteLine();
+            Console.WriteLine("1. Просмотр всех пользователей");
+            Console.WriteLine("2. Просмотр всех пользователей с книгами");
+            Console.WriteLine("3. Добавление нового пользователя");
+            Console.WriteLine("4. Редактирование данных о пользователе");
+            Console.WriteLine("5. Удаление пользователя");
+            Console.WriteLine("6. Назад");
         }
 
         public void PrintFileManagementMenu()
@@ -50,7 +51,6 @@ namespace LibraryManagement.View.Modules.BusinessLogic
             Console.WriteLine("3. Загрузка данных из существующего файла");
             Console.WriteLine("4. Удаление файла");
             Console.WriteLine("5. Назад");
-            Console.WriteLine();
         }
 
         public void PrintBooksManagementMenu()
@@ -60,13 +60,11 @@ namespace LibraryManagement.View.Modules.BusinessLogic
             Console.WriteLine("2. Редактирование информации о книге");
             Console.WriteLine("3. Удаление книги из базы");
             Console.WriteLine("4. Назад");
-            Console.WriteLine();
         }
 
         public void WorkAsAdmin()
         {
             Console.Clear();
-
             while (true)
             {
                 PrintMainMenu();
@@ -99,6 +97,11 @@ namespace LibraryManagement.View.Modules.BusinessLogic
                         Environment.Exit(0);
                         break;
                     }
+                    default:
+                    {
+                        Console.Clear();
+                        break;
+                    }
                 }
             }
             // ReSharper disable once FunctionNeverReturns
@@ -106,6 +109,8 @@ namespace LibraryManagement.View.Modules.BusinessLogic
 
         public void FileManagement()
         {
+            Console.Clear();
+
             var exitToken = true;
             while (exitToken)
             {
@@ -125,6 +130,7 @@ namespace LibraryManagement.View.Modules.BusinessLogic
 
                         var result = FileService.CreateFile(fileName);
 
+                        Console.WriteLine();
                         if (!result.IsSuccess)
                         {
                             foreach (var error in result.Errors)
@@ -134,19 +140,17 @@ namespace LibraryManagement.View.Modules.BusinessLogic
                         }
                         else
                         {
-                            Console.WriteLine("Файл успешно создан");
+                            Console.WriteLine("Файл данных \"{fileName}\" успешно создан");
                         }
 
-                        Console.WriteLine("** Нажмите любую клавишу для выхода **");
-                        Console.ReadKey();
-
+                        PrintPressAnyBottom();
                         break;
                     }
 
                     case ConsoleKey.D2:
                     {
                         Console.Clear();
-                        Console.WriteLine("Просмотр существующих файлов");
+                        Console.WriteLine("Список существующих файлов");
 
                         var fileInfos = FileService.GetCurrentFiles();
 
@@ -158,13 +162,11 @@ namespace LibraryManagement.View.Modules.BusinessLogic
                         {
                             foreach (var (fileId, fileName) in fileInfos)
                             {
-                                Console.WriteLine($"{fileId}. {fileName}");
+                                Console.WriteLine($"{fileId + 1}. {Path.GetFileName(fileName)}");
                             }
                         }
 
-                        Console.WriteLine("** Нажмите любую клавишу для выхода **");
-                        Console.ReadKey();
-
+                        PrintPressAnyBottom();
                         break;
                     }
 
@@ -173,8 +175,9 @@ namespace LibraryManagement.View.Modules.BusinessLogic
                         Console.Clear();
                         Console.WriteLine("Загрузка данных из существующего файла");
                         Console.WriteLine("Выберите номер файла");
-                        Console.WriteLine($"Для выхода нажмите {Constants.OperationConstants.ReturnOperationId}");
+                        Console.WriteLine($"Для выхода введите {Constants.OperationConstants.ReturnOperationId}");
                         Console.WriteLine("!!! Внимание, данное действие сотрет все несохраненные данные");
+                        Console.WriteLine();
 
                         var fileInfos = FileService.GetCurrentFiles();
 
@@ -186,17 +189,17 @@ namespace LibraryManagement.View.Modules.BusinessLogic
                         {
                             foreach (var (fileId, fileName) in fileInfos)
                             {
-                                Console.WriteLine($"{fileId}. {fileName}");
+                                Console.WriteLine($"{fileId + 1}. {Path.GetFileName(fileName)}");
                             }
 
-                            var fileSelection = ConsoleExtensions.ReadInteger(Constants.OperationConstants.ReturnOperationId, fileInfos.Keys.Max());
+                            var fileSelection = ConsoleExtensions.ReadInteger(Constants.OperationConstants.ReturnOperationId, fileInfos.Count);
 
                             if (fileSelection == Constants.OperationConstants.ReturnOperationId)
                             {
                                 break;
                             }
 
-                            var result = FileService.ReadFile(fileInfos[fileSelection]);
+                            var result = FileService.ReadFile(fileInfos[fileSelection - 1]);
 
                             if (!result.IsSuccess)
                             {
@@ -211,8 +214,7 @@ namespace LibraryManagement.View.Modules.BusinessLogic
                             }
                         }
 
-                        Console.WriteLine("** Нажмите любую клавишу для выхода **");
-                        Console.ReadKey();
+                        PrintPressAnyBottom();
                         break;
                     }
 
@@ -221,8 +223,8 @@ namespace LibraryManagement.View.Modules.BusinessLogic
                         Console.Clear();
                         Console.WriteLine("Удаление файла");
                         Console.WriteLine("Выберите номер файла");
-                        Console.WriteLine($"Для выхода нажмите {Constants.OperationConstants.ReturnOperationId}");
-
+                        Console.WriteLine($"Для выхода введите {Constants.OperationConstants.ReturnOperationId}");
+                        Console.WriteLine();
                         var fileInfos = FileService.GetCurrentFiles();
 
                         if (fileInfos == null || fileInfos.Count == 0)
@@ -233,17 +235,17 @@ namespace LibraryManagement.View.Modules.BusinessLogic
                         {
                             foreach (var (fileId, fileName) in fileInfos)
                             {
-                                Console.WriteLine($"{fileId}. {fileName}");
+                                Console.WriteLine($"{fileId + 1}. {Path.GetFileName(fileName)}");
                             }
 
-                            var fileSelection = ConsoleExtensions.ReadInteger(Constants.OperationConstants.ReturnOperationId, fileInfos.Keys.Max());
+                            var fileSelection = ConsoleExtensions.ReadInteger(Constants.OperationConstants.ReturnOperationId, fileInfos.Count);
 
                             if (fileSelection == Constants.OperationConstants.ReturnOperationId)
                             {
                                 break;
                             }
 
-                            var result = FileService.DeleteFile(fileInfos[fileSelection]);
+                            var result = FileService.DeleteFile(fileInfos[fileSelection - 1]);
 
                             if (!result.IsSuccess)
                             {
@@ -258,18 +260,18 @@ namespace LibraryManagement.View.Modules.BusinessLogic
                             }
                         }
 
-                        Console.WriteLine("** Нажмите любую клавишу для выхода **");
-                        Console.ReadKey();
+                        PrintPressAnyBottom();
                         break;
                     }
                     case ConsoleKey.D5:
                     {
+                        Console.Clear();
                         exitToken = false;
                         break;
                     }
                     default:
                     {
-                        Console.WriteLine("** Некорректный ввод **");
+                        Console.Clear();
                         break;
                     }
                 }
@@ -278,6 +280,8 @@ namespace LibraryManagement.View.Modules.BusinessLogic
 
         public void BooksManagement()
         {
+            Console.Clear();
+
             var exitToken = true;
             while (exitToken)
             {
@@ -302,9 +306,15 @@ namespace LibraryManagement.View.Modules.BusinessLogic
                         {
                             Console.Clear();
                             Console.WriteLine("Редактирование существующей книги");
+                            Console.WriteLine($"Для выхода введите {Constants.OperationConstants.ReturnOperationId}");
                             Console.WriteLine("Выберите книгу:");
 
                             var selectedBookId = SelectBookFromList();
+                            if (selectedBookId == Constants.OperationConstants.ReturnOperationId)
+                            {
+                                Console.Clear();
+                                break;
+                            }
 
                             var bookItem = CreateOrUpdateBook();
                             bookItem.Id = selectedBookId;
@@ -318,21 +328,28 @@ namespace LibraryManagement.View.Modules.BusinessLogic
                         {
                             Console.Clear();
                             Console.WriteLine("Удаление книги из базы данных");
+                            Console.WriteLine($"Для выхода введите {Constants.OperationConstants.ReturnOperationId}");
                             Console.WriteLine("Выберите книгу:");
 
                             var selectedBookId = SelectBookFromList();
+                            if (selectedBookId == Constants.OperationConstants.ReturnOperationId)
+                            {
+                                Console.Clear();
+                                break;
+                            }
 
                             BusinessService.DeleteBook(selectedBookId);
                             break;
                         }
                     case ConsoleKey.D4:
                     {
+                        Console.Clear();
                         exitToken = false;
                         break;
                     }
                     default:
                     {
-                        Console.WriteLine("** Некорректный ввод **");
+                        Console.Clear();
                         break;
                     }
                 }
@@ -341,21 +358,23 @@ namespace LibraryManagement.View.Modules.BusinessLogic
 
         private BookItem CreateOrUpdateBook()
         {
+            var bookItem = new BookItem();
+
             Console.WriteLine("Введите название книги:");
-            var name = Console.ReadLine();
+            bookItem.Name = Console.ReadLine();
 
             Console.WriteLine("Введите количество страниц:");
-            var countOfPages = ConsoleExtensions.ReadInteger();
+            bookItem.NumberOfPages = ConsoleExtensions.ReadInteger();
 
             Console.WriteLine("Введите год публикации:");
-            var publicationYear = ConsoleExtensions.ReadYear();
+            bookItem.PublicationYear = ConsoleExtensions.ReadYear();
 
             Console.WriteLine("Введите регистрационный номер:");
-            var regNumber = Console.ReadLine();
+            bookItem.RegNumber = Console.ReadLine();
 
             Console.WriteLine();
-            Console.WriteLine(("{0}. Добавить нового автора:", Constants.OperationConstants.AddNewSubEntityOperationId));
-            Console.WriteLine(("{0}. Выбрать из существующих:", Constants.OperationConstants.SelectSubEntityOperationId));
+            Console.WriteLine($"{Constants.OperationConstants.AddNewSubEntityOperationId}. Добавить нового автора:");
+            Console.WriteLine($"{Constants.OperationConstants.SelectSubEntityOperationId}. Выбрать из существующих:");
             var authorOperationChoice = ConsoleExtensions.ReadInteger(Constants.OperationConstants.AddNewSubEntityOperationId, Constants.OperationConstants.SelectSubEntityOperationId);
 
             var authorItem = new AuthorItem();
@@ -364,16 +383,17 @@ namespace LibraryManagement.View.Modules.BusinessLogic
                 case Constants.OperationConstants.SelectSubEntityOperationId:
                 {
                     Console.WriteLine("Существующие авторы:");
-                    Console.WriteLine($"Нажмите \"{Constants.OperationConstants.SelectSubEntityOperationId}\" для добавления нового автора");
+                    Console.WriteLine($"Нажмите \"{Constants.OperationConstants.ReturnOperationId}\" для добавления нового автора");
                     var selectedAuthorId = SelectAuthorFromList();
 
-                    if (selectedAuthorId != Constants.OperationConstants.SelectSubEntityOperationId)
+                    if (selectedAuthorId == Constants.OperationConstants.ReturnOperationId)
                     {
                         InputAuthorFields(authorItem);
                     }
                     else
                     {
                         authorItem.Id = selectedAuthorId;
+                        bookItem.AuthorId = selectedAuthorId;
                     }
 
                     break;
@@ -385,9 +405,11 @@ namespace LibraryManagement.View.Modules.BusinessLogic
                 }
             }
 
+            bookItem.Author = authorItem;
+
             Console.WriteLine();
-            Console.WriteLine(("{0}. Добавить нового издателя:", Constants.OperationConstants.AddNewSubEntityOperationId));
-            Console.WriteLine(("{0}. Выбрать из существующих:", Constants.OperationConstants.SelectSubEntityOperationId));
+            Console.WriteLine($"{Constants.OperationConstants.AddNewSubEntityOperationId}. Добавить нового издателя:");
+            Console.WriteLine($"{Constants.OperationConstants.SelectSubEntityOperationId}. Выбрать из существующих:");
             var publisherOperationChoice = ConsoleExtensions.ReadInteger(Constants.OperationConstants.AddNewSubEntityOperationId, Constants.OperationConstants.SelectSubEntityOperationId);
 
             var publisherItem = new PublisherItem();
@@ -396,15 +418,16 @@ namespace LibraryManagement.View.Modules.BusinessLogic
                 case Constants.OperationConstants.SelectSubEntityOperationId:
                 {
                     Console.WriteLine("Существующие издатели:");
-                    Console.WriteLine($"Нажмите \"{Constants.OperationConstants.SelectSubEntityOperationId}\" для добавления нового издателя");
+                    Console.WriteLine($"Нажмите \"{Constants.OperationConstants.ReturnOperationId}\" для добавления нового издателя");
                     var selectedPublisherId = SelectPublisherFromList();
 
-                    if (selectedPublisherId != Constants.OperationConstants.SelectSubEntityOperationId)
+                    if (selectedPublisherId == Constants.OperationConstants.ReturnOperationId)
                     {
                         InputPublisherFields(publisherItem);
                     }
                     else
                     {
+                        bookItem.PublisherId = selectedPublisherId;
                         publisherItem.Id = selectedPublisherId;
                     }
 
@@ -417,30 +440,50 @@ namespace LibraryManagement.View.Modules.BusinessLogic
                 }
             }
 
-            return new BookItem
-            {
-                Name = name,
-                Author = authorItem,
-                IsBookInLibrary = false,
-                NumberOfPages = countOfPages,
-                PublicationYear = publicationYear,
-                Publisher = publisherItem,
-                RegNumber = regNumber,
-            };
+            bookItem.Publisher = publisherItem;
+
+            bookItem.IsBookInLibrary = false;
+
+            return bookItem;
         }
 
         public void UsersManagement()
         {
+            Console.Clear();
+
             var exitToken = true;
             while (exitToken)
             {
-                Console.Clear();
                 PrintUserManagementMenu();
 
                 var choice = Console.ReadKey();
                 switch (choice.Key)
                 {
                     case ConsoleKey.D1:
+                    {
+                        Console.Clear();
+
+                        var users = BusinessService.GetUsersIncludeBooks();
+                        foreach (var user in users)
+                        {
+                            Console.WriteLine($"Id: {user.Id}");
+                            Console.WriteLine($"Логин: {user.Login}");
+                            Console.WriteLine($"Роль: {user.Role.GetDescription()}");
+                            Console.WriteLine($"Номер читательского билета: {user.LibraryCardNumber}");
+                            if (user.LastTakenBooks != null && user.LastTakenBooks.Any())
+                            {
+                                Console.WriteLine($"Последние взятые книги: {user.LastTakenBooks.Select(w => w.Name).Aggregate((i, j) => i + ", " + j)}");
+                            }
+
+                            Console.WriteLine();
+                        }
+
+                        PrintPressAnyBottom();
+                        Console.Clear();
+                        break;
+                    }
+
+                    case ConsoleKey.D2:
                         {
                             Console.Clear();
 
@@ -451,16 +494,20 @@ namespace LibraryManagement.View.Modules.BusinessLogic
                                 Console.WriteLine($"Логин: {user.Login}");
                                 Console.WriteLine($"Роль: {user.Role.GetDescription()}");
                                 Console.WriteLine($"Номер читательского билета: {user.LibraryCardNumber}");
-                                Console.WriteLine($"Взятые книги: {user.LastTakenBooks?.Select(w => w.Name).Aggregate((i, j) => i + ", " + j)}");
+                                if (user.LastTakenBooks != null && user.LastTakenBooks.Any())
+                                {
+                                    Console.WriteLine($"Книги на руках: {user.LastTakenBooks?.Select(w => w.Name).Aggregate((i, j) => i + ", " + j)}");
+                                }
+
                                 Console.WriteLine();
                             }
 
-                            Console.WriteLine("* Нажмите любую клавишу для выхода *");
-                            Console.ReadKey();
+                            PrintPressAnyBottom();
+                            Console.Clear();
                             break;
                         }
 
-                    case ConsoleKey.D2:
+                    case ConsoleKey.D3:
                         {
                             Console.Clear();
                             Console.WriteLine("Создание новой учетной записи");
@@ -485,17 +532,35 @@ namespace LibraryManagement.View.Modules.BusinessLogic
                                 Role = roleType
                             };
 
-                            BusinessService.CreateUser(userItem);
+                            var result = BusinessService.CreateUser(userItem);
+
+                            Console.Clear();
+                            if (!result.IsSuccess)
+                            {
+                                foreach (var error in result.Errors)
+                                {
+                                    Console.WriteLine(error.Message);
+                                }
+
+                                Console.WriteLine();
+                            }
+
                             break;
                         }
 
-                    case ConsoleKey.D3:
+                    case ConsoleKey.D4:
                         {
                             Console.Clear();
                             Console.WriteLine("Редактирование существующей учетной записи");
+                            Console.WriteLine($"Для выхода введите {Constants.OperationConstants.ReturnOperationId}");
                             Console.WriteLine("Выберите учетную запись:");
 
                             var selectedUserId = SelectUserFromList();
+                            Console.Clear();
+                            if (selectedUserId == Constants.OperationConstants.ReturnOperationId)
+                            {
+                                break;
+                            }
 
                             Console.WriteLine("Введите новый логин:");
                             var login = Console.ReadLine();
@@ -503,11 +568,11 @@ namespace LibraryManagement.View.Modules.BusinessLogic
                             Console.WriteLine("Введите новый пароль:");
                             var password = Console.ReadLine();
 
-                            Console.WriteLine("Новый тип записи: 0 - пользователь, 1 - администратор:");
-                            var roleType = ConsoleExtensions.ReadRoleType();
-
                             Console.WriteLine("Введите новый уникальный 6-значный номер читательского билета или оставьте пустым для автоматической генерации");
                             var cardNumber = InputCardNumber(selectedUserId);
+
+                            Console.WriteLine("Новый тип записи: 0 - пользователь, 1 - администратор:");
+                            var roleType = ConsoleExtensions.ReadRoleType();
 
                             var userItem = new UserItem
                             {
@@ -518,46 +583,68 @@ namespace LibraryManagement.View.Modules.BusinessLogic
                                 Role = roleType
                             };
 
-                            BusinessService.UpdateUser(userItem);
+                            var result = BusinessService.UpdateUser(userItem);
+
+                            Console.Clear();
+                            if (!result.IsSuccess)
+                            {
+                                foreach (var error in result.Errors)
+                                {
+                                    Console.WriteLine(error.Message);
+                                }
+
+                                Console.WriteLine();
+                            }
 
                             break;
                         }
 
-                    case ConsoleKey.D4:
+                    case ConsoleKey.D5:
                         {
                             Console.Clear();
                             Console.WriteLine("Удаление учетной записи");
+                            Console.WriteLine($"Для выхода введите {Constants.OperationConstants.ReturnOperationId}");
                             Console.WriteLine("Выберите учетную запись:");
 
-                            var selectedUserId = SelectUserFromList();
+                            var selectedUserId = SelectUserFromList(CurrentUserId);
+                            if (selectedUserId == Constants.OperationConstants.ReturnOperationId)
+                            {
+                                Console.Clear();
+                                break;
+                            }
 
                             BusinessService.DeleteUser(selectedUserId);
+
+                            Console.Clear();
+                            Console.WriteLine("Пользователь был успешно удален");
+
                             break;
                         }
-                    case ConsoleKey.D5:
+                    case ConsoleKey.D6:
                     {
+                        Console.Clear();
                         exitToken = false;
                         break;
                     }
                     default:
                     {
-                        Console.WriteLine("** Некорректный ввод **");
+                        Console.Clear();
                         break;
                     }
                 }
             }
         }
 
-        private int SelectUserFromList()
+        private int SelectUserFromList(int? exceptedId = null)
         {
-            var users = BusinessService.GetUsers();
+            var users = BusinessService.GetUsers(exceptedId);
 
             foreach (var user in users)
             {
                 Console.WriteLine($"{user.Id}. {user.Login}");
             }
 
-            var selectedUserId = ConsoleExtensions.ReadInteger(users.Min(x => x.Id), users.Max(x => x.Id));
+            var selectedUserId = ConsoleExtensions.ReadInteger(Constants.OperationConstants.ReturnOperationId, users.Max(x => x.Id));
 
             return selectedUserId;
         }
@@ -571,7 +658,7 @@ namespace LibraryManagement.View.Modules.BusinessLogic
                 Console.WriteLine($"{author.Id}. {author.DisplayName}");
             }
 
-            var selectedAuthorId = ConsoleExtensions.ReadInteger(authors.Min(x => x.Id), authors.Max(x => x.Id), Constants.OperationConstants.ReturnOperationId);
+            var selectedAuthorId = ConsoleExtensions.ReadInteger(Constants.OperationConstants.ReturnOperationId, authors.Max(x => x.Id), Constants.OperationConstants.ReturnOperationId);
 
             return selectedAuthorId;
         }
@@ -585,9 +672,9 @@ namespace LibraryManagement.View.Modules.BusinessLogic
                 Console.WriteLine($"{publisher.Id}. {publisher.Name}");
             }
 
-            var selectedAuthorId = ConsoleExtensions.ReadInteger(publishers.Min(x => x.Id), publishers.Max(x => x.Id), Constants.OperationConstants.ReturnOperationId);
+            var selectedPublisherId = ConsoleExtensions.ReadInteger(Constants.OperationConstants.ReturnOperationId, publishers.Max(x => x.Id), Constants.OperationConstants.ReturnOperationId);
 
-            return selectedAuthorId;
+            return selectedPublisherId;
         }
 
         private int SelectBookFromList()
@@ -599,7 +686,7 @@ namespace LibraryManagement.View.Modules.BusinessLogic
                 Console.WriteLine($"{book.Id}. {book.Name}");
             }
 
-            var selectedBookId = ConsoleExtensions.ReadInteger(books.Min(x => x.Id), books.Max(x => x.Id));
+            var selectedBookId = ConsoleExtensions.ReadInteger(Constants.OperationConstants.ReturnOperationId, books.Max(x => x.Id));
 
             return selectedBookId;
         }
@@ -623,7 +710,8 @@ namespace LibraryManagement.View.Modules.BusinessLogic
                     }
                 }
 
-                Console.WriteLine("** Введенный номер карточки не подходит либо уже существует в системе **");
+                Console.WriteLine();
+                Console.WriteLine("Введенный номер карточки не подходит либо уже существует в системе");
             }
         }
 

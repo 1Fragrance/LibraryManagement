@@ -57,7 +57,7 @@ namespace LibraryManagement.View
             {
                 var str = Console.ReadLine();
 
-                if (!string.Equals(str, Constants.Strings.Yes, StringComparison.InvariantCultureIgnoreCase) || !string.Equals(str, Constants.Strings.No, StringComparison.InvariantCultureIgnoreCase))
+                if (!string.Equals(str, Constants.Strings.Yes, StringComparison.InvariantCultureIgnoreCase) && !string.Equals(str, Constants.Strings.No, StringComparison.InvariantCultureIgnoreCase))
                 {
                     Console.WriteLine("** Некорректный ввод! **");
                     continue;

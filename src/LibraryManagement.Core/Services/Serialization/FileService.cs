@@ -77,7 +77,7 @@ namespace LibraryManagement.Core.Services.Serialization
                                 Patronymic = recordFields[4]
                             };
 
-                            Context.Authors.CreateEntity(authorEntity);
+                            Context.Authors.SaveEntityWithId(authorEntity);
                             break;
                         }
                         case nameof(PublisherEntity):
@@ -93,7 +93,7 @@ namespace LibraryManagement.Core.Services.Serialization
                                 Name = recordFields[2]
                             };
 
-                            Context.Publishers.CreateEntity(publisherEntity);
+                            Context.Publishers.SaveEntityWithId(publisherEntity);
                             break;
                         }
                         case nameof(UserEntity):
@@ -112,7 +112,7 @@ namespace LibraryManagement.Core.Services.Serialization
                                 LibraryCardNumber = recordFields[5]
                             };
 
-                            Context.Users.CreateEntity(userEntity);
+                            Context.Users.SaveEntityWithId(userEntity);
                             break;
                         }
                         case nameof(BookEntity):
@@ -135,7 +135,7 @@ namespace LibraryManagement.Core.Services.Serialization
                                 LastUserId = Convert.ToInt32(recordFields[9])
                             };
 
-                            Context.Books.CreateEntity(bookEntity);
+                            Context.Books.SaveEntityWithId(bookEntity);
                             break;
                         }
                         default:

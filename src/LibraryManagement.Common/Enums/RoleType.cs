@@ -7,10 +7,10 @@ namespace LibraryManagement.Common.Enums
     /// </summary>
     public enum RoleType
     {
-        [Description("Client type")]
+        [Description("Клиент")]
         Client = 0,
 
-        [Description("Admin type")]
+        [Description("Админ")]
         Admin = 1
     }
 }

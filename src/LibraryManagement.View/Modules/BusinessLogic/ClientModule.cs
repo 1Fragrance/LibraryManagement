@@ -6,7 +6,7 @@ namespace LibraryManagement.View.Modules.BusinessLogic
 {
     public class ClientModule : BusinessLogicModuleBase<ClientService>
     {
-        public ClientModule(DbDataSource dataSource)
+        public ClientModule(int currentUserId, DbDataSource dataSource) : base(currentUserId)
         {
             BusinessService = new ClientService(dataSource);
         }
@@ -16,7 +16,6 @@ namespace LibraryManagement.View.Modules.BusinessLogic
             Console.WriteLine("Система просмотра наличия книг в библиотеке");
             Console.WriteLine("1. Просмотр книг");
             Console.WriteLine("2. Выход из программы");
-            Console.WriteLine();
         }
 
         public void WorkAsClient()
@@ -38,6 +37,11 @@ namespace LibraryManagement.View.Modules.BusinessLogic
                     case ConsoleKey.D2:
                     {
                         Environment.Exit(0);
+                        break;
+                    }
+                    default:
+                    {
+                        Console.Clear();
                         break;
                     }
                 }

@@ -21,7 +21,8 @@ namespace LibraryManagement.Core.Services.Auth
             return new AuthResult
             {
                 IsSuccess = true,
-                Role = userEntity.Role
+                Role = userEntity.Role,
+                CurrentUserId = userEntity.Id
             };
         }
     }

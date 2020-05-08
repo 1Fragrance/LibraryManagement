@@ -1,7 +1,7 @@
-﻿using System;
-using LibraryManagement.Common.Enums;
+﻿using LibraryManagement.Common.Results;
 using LibraryManagement.Core.Services.Auth;
 using LibraryManagement.Data;
+using System;
 
 namespace LibraryManagement.View.Modules.Auth
 {
@@ -22,10 +22,8 @@ namespace LibraryManagement.View.Modules.Auth
             Console.WriteLine("2. Выйти из системы");
         }
 
-        public RoleType SignIn()
+        public AuthResult SignIn()
         {
-            Console.Clear();
-
             while (true)
             {
                 PrintMainMenu();
@@ -46,11 +44,13 @@ namespace LibraryManagement.View.Modules.Auth
 
                         if (!authResult.IsSuccess || authResult.Role == null)
                         {
-                            Console.WriteLine("Такого аккаунта нет в системе\n");
+                            Console.Clear();
+                            Console.WriteLine("Такого аккаунта нет в системе");
+                            Console.WriteLine();
                             break;
                         }
 
-                        return authResult.Role.Value;
+                        return authResult;
                     }
                     case ConsoleKey.D2:
                     {
@@ -59,7 +59,7 @@ namespace LibraryManagement.View.Modules.Auth
                     }
                     default:
                     {
-                        Console.WriteLine("** Некорректный ввод! **\n");
+                        Console.Clear();
                         break;
                     }
                 }

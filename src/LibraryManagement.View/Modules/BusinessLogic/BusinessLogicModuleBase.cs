@@ -1,15 +1,19 @@
-﻿using System;
-using LibraryManagement.Common;
+﻿using LibraryManagement.Common;
 using LibraryManagement.Common.Enums;
 using LibraryManagement.Common.Filters;
 using LibraryManagement.Common.Items;
 using LibraryManagement.Core.Services.BusinessLogic;
+using System;
 
 namespace LibraryManagement.View.Modules.BusinessLogic
 {
     public abstract class BusinessLogicModuleBase<T> : ModuleBase where T : BusinessLogicServiceBase
     {
         protected T BusinessService { get; set; }
+
+        protected BusinessLogicModuleBase(int currentUserId) : base(currentUserId)
+        {
+        }
 
         public void PrintBooksViewMenu()
         {
@@ -20,7 +24,6 @@ namespace LibraryManagement.View.Modules.BusinessLogic
             Console.WriteLine("4. Вывод книг в алфавитном порядке, изданных после заданного года");
             Console.WriteLine("5. Вывод книг находящихся в текущий момент у читателей");
             Console.WriteLine("6. Назад");
-            Console.WriteLine();
         }
 
         private static void PrintBookFieldSelection()
@@ -38,6 +41,8 @@ namespace LibraryManagement.View.Modules.BusinessLogic
 
         public void BooksView()
         {
+            Console.Clear();
+
             var exitToken = true;
             while (exitToken)
             {
@@ -57,8 +62,7 @@ namespace LibraryManagement.View.Modules.BusinessLogic
                                 PrintBookInfo(book);
                             }
 
-                            Console.WriteLine("* Нажмите любую клавишу для выхода *");
-                            Console.ReadKey();
+                            PrintPressAnyBottom();
                             break;
                         }
 
@@ -69,6 +73,7 @@ namespace LibraryManagement.View.Modules.BusinessLogic
                             PrintBookFieldSelection();
 
                             var selectedFilteringType = ConsoleExtensions.ReadInteger((int)BookFilteringType.ByName, (int)BookFilteringType.ByLastUserName);
+                            Console.Clear();
                             Console.WriteLine("Введите значение для фильтрации");
 
                             var filter = new BookFilter();
@@ -117,6 +122,7 @@ namespace LibraryManagement.View.Modules.BusinessLogic
                                     }
                             }
 
+                            Console.Clear();
                             var books = BusinessService.GetFilteredBooks(filter);
 
                             foreach (var book in books)
@@ -124,8 +130,7 @@ namespace LibraryManagement.View.Modules.BusinessLogic
                                 PrintBookInfo(book);
                             }
 
-                            Console.WriteLine("** Нажмите любую клавишу для выхода **");
-                            Console.ReadKey();
+                            PrintPressAnyBottom();
                             break;
                         }
 
@@ -136,19 +141,19 @@ namespace LibraryManagement.View.Modules.BusinessLogic
                             PrintBookFieldSelection();
 
                             var selectedOrderingType = ConsoleExtensions.ReadInteger((int)BookFilteringType.ByName, (int)BookFilteringType.ByLastUserName);
-
+                            Console.Clear();
                             Console.WriteLine("Вывести по возрастанию? (Да, Нет)");
                             var isAsc = ConsoleExtensions.ReadBoolean();
 
                             var books = BusinessService.GetSortedBooks((BookFilteringType)selectedOrderingType, isAsc);
 
-                            foreach (var book in books)
+                            Console.Clear();
+;                           foreach (var book in books)
                             {
                                 PrintBookInfo(book);
                             }
 
-                            Console.WriteLine("** Нажмите любую клавишу для выхода **");
-                            Console.ReadKey();
+                            PrintPressAnyBottom();
                             break;
                         }
 
@@ -161,14 +166,13 @@ namespace LibraryManagement.View.Modules.BusinessLogic
                             var selectedYear = ConsoleExtensions.ReadInteger();
 
                             var books = BusinessService.GetOrderedBooksAfterSelectedYear(selectedYear);
-
+                            Console.Clear();
                             foreach (var book in books)
                             {
                                 PrintBookInfo(book);
                             }
 
-                            Console.WriteLine("** Нажмите любую клавишу для выхода **");
-                            Console.ReadKey();
+                            PrintPressAnyBottom();
 
                             break;
                         }
@@ -183,19 +187,18 @@ namespace LibraryManagement.View.Modules.BusinessLogic
                                 PrintBookInfo(book);
                             }
 
-                            Console.WriteLine("** Нажмите любую клавишу для выхода **");
-                            Console.ReadKey();
-
+                            PrintPressAnyBottom();
                             break;
                         }
                     case ConsoleKey.D6:
                         {
+                            Console.Clear();
                             exitToken = false;
                             break;
                         }
                     default:
                         {
-                            Console.WriteLine("** Некорректный ввод **");
+                            Console.Clear();
                             break;
                         }
                 }
@@ -212,7 +215,10 @@ namespace LibraryManagement.View.Modules.BusinessLogic
             Console.WriteLine($"Год издания: {book.PublicationYear}");
             Console.WriteLine($"Издательство: {book.Publisher?.Name}");
             Console.WriteLine($"На руках у читателя: {(book.IsBookInLibrary ? "Нет" : "Да")}");
-            Console.WriteLine($"Номер читательского билета последнего читателя {book.LastUser?.LibraryCardNumber}");
+            if (book.LastUser != null)
+            {
+                Console.WriteLine($"Номер читательского билета последнего читателя {book.LastUser?.LibraryCardNumber}");
+            }
 
             Console.WriteLine();
         }

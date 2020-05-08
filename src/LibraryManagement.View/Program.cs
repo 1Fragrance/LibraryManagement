@@ -15,8 +15,8 @@ namespace LibraryManagement.View
         {
             Directory.SetCurrentDirectory(Path.GetDirectoryName(typeof(Program).Assembly.Location));
 
-            try
-            {
+            //try
+            //{
                 using (var context = new DatabaseContext())
                 {
                     using (var dataSource = new DbDataSource(context))
@@ -28,14 +28,14 @@ namespace LibraryManagement.View
                         RunProgram(dataSource);
                     }
                 }
-            }
-            catch (Exception ex)
-            {
+            //}
+            //catch (Exception ex)
+            //{
                 #if DEBUG
-                    Console.WriteLine(ex.Message);
+                    //Console.WriteLine(ex.Message);
                 #endif
-                LogToFile(ex.Message);
-            }
+                //LogToFile(ex.Message);
+            //}
         }
 
         private static void LogToFile(string str)
@@ -50,20 +50,20 @@ namespace LibraryManagement.View
         {
             var authModule = new AuthModule(dataSource);
             
-            var currentUserType = authModule.SignIn();
+            var authResult = authModule.SignIn();
 
-            switch (currentUserType)
+            switch (authResult.Role)
             {
                 case RoleType.Client:
                 {
-                    var clientModule = new ClientModule(dataSource);
+                    var clientModule = new ClientModule(authResult.CurrentUserId, dataSource);
                     clientModule.WorkAsClient();
 
                     break;
                 }
                 case RoleType.Admin:
                 {
-                    var adminModule = new AdminModule(dataSource);
+                    var adminModule = new AdminModule(authResult.CurrentUserId, dataSource);
                     adminModule.WorkAsAdmin();
 
                     break;

@@ -15,7 +15,7 @@ namespace LibraryManagement.Data.Entities
         /// Entity id
         /// </summary>
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [SerializationOrder(-1)]
         public int Id { get; set; }
 
@@ -28,7 +28,8 @@ namespace LibraryManagement.Data.Entities
                 .Where(r => r.CustomAttributes.Any(w => w.AttributeType == typeof(SerializationOrderAttribute)))
                 .OrderBy(w =>  (w.GetCustomAttributes(typeof(SerializationOrderAttribute), false).FirstOrDefault() as SerializationOrderAttribute)?.Order);
 
-            var classPropertiesString = classProperties.Select(w => w.Name).Aggregate((i, j) => i + Constants.Serialization.FileDelimiter + j);
+            //var classPropertiesString = classProperties.Select(w => w.GetValue(this, null)?.ToString()).Aggregate((i, j) => i + Constants.Serialization.FileDelimiter + j);
+            var classPropertiesString = string.Join(Constants.Serialization.FileDelimiter, classProperties.Select(w => w.GetValue(this, null)?.ToString()));
 
             return $"{GetType().Name}{Constants.Serialization.FileDelimiter}{classPropertiesString}";
         }

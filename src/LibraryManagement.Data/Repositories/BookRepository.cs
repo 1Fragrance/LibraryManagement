@@ -40,7 +40,7 @@ namespace LibraryManagement.Data.Repositories
                 .Include(w => w.Author)
                 .Include(w => w.LastUser)
                 .Include(w => w.Publisher)
-                .Where(r => r.PublicationYear <= year).OrderBy(w => w.Name).ToList();
+                .Where(r => r.PublicationYear >= year).OrderBy(w => w.Name).ToList();
         }
 
         public IList<BookEntity> GetSortedBooks(BookFilteringType filteringType, bool isAsc)

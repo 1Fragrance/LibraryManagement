@@ -12,6 +12,7 @@ namespace LibraryManagement.Core.Mappers
                 sourceEntity = new AuthorEntity();
             }
 
+            sourceEntity.Id = item.Id.GetValueOrDefault();
             sourceEntity.Name = item.Name;
             sourceEntity.Surname = item.Surname;
             sourceEntity.Patronymic = item.Patronymic;
@@ -26,6 +27,7 @@ namespace LibraryManagement.Core.Mappers
                 sourceItem = new AuthorItem();
             }
 
+            sourceItem.Id = entity.Id;
             sourceItem.Name = entity.Name;
             sourceItem.Patronymic = entity.Patronymic;
             sourceItem.Surname = entity.Surname;
