@@ -48,29 +48,32 @@ namespace LibraryManagement.View
 
         private static void RunProgram(DbDataSource dataSource)
         {
-            var authModule = new AuthModule(dataSource);
-            
-            var authResult = authModule.SignIn();
-
-            switch (authResult.Role)
+            while (true)
             {
-                case RoleType.Client:
-                {
-                    var clientModule = new ClientModule(authResult.CurrentUserId, dataSource);
-                    clientModule.WorkAsClient();
+                var authModule = new AuthModule(dataSource);
 
-                    break;
-                }
-                case RoleType.Admin:
-                {
-                    var adminModule = new AdminModule(authResult.CurrentUserId, dataSource);
-                    adminModule.WorkAsAdmin();
+                var authResult = authModule.SignIn();
 
-                    break;
-                }
-                default:
+                switch (authResult.Role)
                 {
-                    throw new InvalidDataException();
+                    case RoleType.Client:
+                    {
+                        var clientModule = new ClientModule(authResult.CurrentUserId, dataSource);
+                        clientModule.WorkAsClient();
+
+                        break;
+                    }
+                    case RoleType.Admin:
+                    {
+                        var adminModule = new AdminModule(authResult.CurrentUserId, dataSource);
+                        adminModule.WorkAsAdmin();
+
+                        break;
+                    }
+                    default:
+                    {
+                        throw new InvalidDataException();
+                    }
                 }
             }
         }

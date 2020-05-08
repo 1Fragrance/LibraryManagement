@@ -24,13 +24,16 @@ namespace LibraryManagement.View.Modules.BusinessLogic.Admin
             Console.WriteLine("2. Управление книгами");
             Console.WriteLine("3. Просмотр книг");
             Console.WriteLine("4. Работа с файлами данных");
-            Console.WriteLine("5. Выход из программы");
+            Console.WriteLine("5. Вернутся на окно входа в учетную запись");
+            Console.WriteLine("6. Выход из программы");
         }
 
         public void WorkAsAdmin()
         {
             Console.Clear();
-            while (true)
+            var exitToken = true;
+
+            while (exitToken)
             {
                 PrintMainMenu();
                 var choice = Console.ReadKey();
@@ -58,6 +61,12 @@ namespace LibraryManagement.View.Modules.BusinessLogic.Admin
                         break;
                     }
                     case ConsoleKey.D5:
+                    {
+                        exitToken = false;
+                        Console.Clear();
+                        break;
+                    }
+                    case ConsoleKey.D6:
                     {
                         Environment.Exit(0);
                         break;

@@ -108,7 +108,7 @@ namespace LibraryManagement.Core.Services.Serialization
                                 Id = Convert.ToInt32(recordFields[1]),
                                 Login = recordFields[2],
                                 Password = recordFields[3],
-                                Role = EnumExtensions.GetValueFromDescription<RoleType>(recordFields[4]),
+                                Role = EnumExtensions.GetValueFromName<RoleType>(recordFields[4]),
                                 LibraryCardNumber = recordFields[5]
                             };
 
@@ -144,7 +144,7 @@ namespace LibraryManagement.Core.Services.Serialization
                         }
                     }
                 }
-        }
+            }
             catch (Exception ex)
             {
                 return FileParseBadResult($"Формат файла нарушен. Ошибка на строке: {index + 1}");

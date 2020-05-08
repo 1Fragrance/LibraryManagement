@@ -18,7 +18,7 @@ namespace LibraryManagement.Common.Enums
             return null;
         }
 
-        public static T GetValueFromDescription<T>(string description)
+        public static T GetValueFromName<T>(string description)
         {
             var type = typeof(T);
             if (!type.IsEnum)
@@ -28,16 +28,14 @@ namespace LibraryManagement.Common.Enums
 
             foreach (var field in type.GetFields())
             {
+                if (field.Name == description)
+                {
+                    return (T)field.GetValue(null);
+                }
+
                 if (Attribute.GetCustomAttribute(field, typeof(DescriptionAttribute)) is DescriptionAttribute attribute)
                 {
                     if (attribute.Description == description)
-                    {
-                        return (T) field.GetValue(null);
-                    }
-                }
-                else
-                {
-                    if (field.Name == description)
                     {
                         return (T) field.GetValue(null);
                     }
