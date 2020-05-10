@@ -84,7 +84,7 @@ namespace LibraryManagement.View
             do
             {
                 var key = Console.ReadKey(true);
-                // Backspace Should Not Work
+                
                 if (key.Key != ConsoleKey.Backspace && key.Key != ConsoleKey.Enter)
                 {
                     pass += key.KeyChar;
