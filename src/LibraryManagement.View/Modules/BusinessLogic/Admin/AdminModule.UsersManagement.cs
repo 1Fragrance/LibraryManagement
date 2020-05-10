@@ -88,9 +88,9 @@ namespace LibraryManagement.View.Modules.BusinessLogic.Admin
                         var login = ConsoleExtensions.ReadNotEmptyString(); ;
 
                         Console.WriteLine("Введите пароль:");
-                        var password = ConsoleExtensions.ReadNotEmptyString();
+                        var password = ConsoleExtensions.InputPassword();
 
-                        Console.WriteLine("Введите уникальный 6-значный номер читательского билета или оставьте пустым для автоматической генерации");
+                        Console.WriteLine("\nВведите уникальный 6-значный номер читательского билета или оставьте пустым для автоматической генерации");
                         var cardNumber = InputCardNumber();
 
                         Console.WriteLine("Тип записи: 0 - пользователь, 1 - администратор:");
@@ -106,7 +106,7 @@ namespace LibraryManagement.View.Modules.BusinessLogic.Admin
 
                         var result = BusinessService.CreateUser(userItem);
 
-                        Console.Clear();
+                        
                         if (!result.IsSuccess)
                         {
                             foreach (var error in result.Errors)
@@ -116,6 +116,12 @@ namespace LibraryManagement.View.Modules.BusinessLogic.Admin
 
                             Console.WriteLine();
                         }
+                        else
+                        {
+                            Console.WriteLine("\n\nСоздание прошло успешно\nНажмите любую клавишу для продолжения");
+                        }
+                        Console.ReadKey();
+                        Console.Clear();
 
                         break;
                     }

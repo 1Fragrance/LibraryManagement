@@ -38,7 +38,7 @@ namespace LibraryManagement.View.Modules.BusinessLogic.Admin
 
                         var result = BusinessService.CreateBook(bookItem);
 
-                        Console.Clear();
+                        
                         if (!result.IsSuccess)
                         {
                             foreach (var error in result.Errors)
@@ -48,8 +48,14 @@ namespace LibraryManagement.View.Modules.BusinessLogic.Admin
 
                             Console.WriteLine();
                         }
+                        else
+                        {
+                            Console.WriteLine("\n\nСоздание прошло успешно\nНажмите любую клавишу для продолжения");
+                        }
 
-                        break;
+                        Console.ReadKey();
+                        Console.Clear();
+                            break;
                     }
 
                     case ConsoleKey.D2:

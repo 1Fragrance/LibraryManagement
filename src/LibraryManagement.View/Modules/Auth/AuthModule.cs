@@ -38,17 +38,21 @@ namespace LibraryManagement.View.Modules.Auth
                         Console.WriteLine("Введите логин:");
                         var login = ConsoleExtensions.ReadNotEmptyString();
                         Console.WriteLine("Введите пароль:");
-                        var password = ConsoleExtensions.ReadNotEmptyString();
+                        var password = ConsoleExtensions.InputPassword();
 
                         var authResult = AuthService.SignIn(login, password);
 
                         if (!authResult.IsSuccess || authResult.Role == null)
                         {
-                            Console.Clear();
                             Console.WriteLine("Такого аккаунта нет в системе");
                             Console.WriteLine();
                             break;
                         }
+
+                        Console.WriteLine("\n\nВход успешно произведен\nНажмите любую клавишу для продолжения");
+                        Console.ReadKey();
+                        Console.Clear();
+
 
                         return authResult;
                     }
